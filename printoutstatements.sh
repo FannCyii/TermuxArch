@@ -60,6 +60,7 @@ TRAPS[3]="trap _TRPQ_ QUIT"
 TRAPS[4]=" "
 
 _CFLHDR_() { #	Create file headers, and interests comments.  
+versionid="v1.6 id4486"
   	if [[ -z "${2:-}" ]] ; then
 		printf "%s\\n" "${FLHDR0[@]}" > "$1"
 		printf "%s\\n" "${FLHDR1[@]}" >> "$1"
@@ -73,6 +74,8 @@ _CFLHDR_() { #	Create file headers, and interests comments.
 	printf "%s\\n" "${TRPSIGNAL[@]}" >> "$1"
 	printf "%s\\n" "${TRPQUIT[@]}" >> "$1"
  	printf "%s\\n" "${TRAPS[@]}" >> "$1"
+# echo "$versionid"
+# exit
 }
 
 _PRINTCONTACTING_() {
