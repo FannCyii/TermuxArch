@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6 id206714411697"
+versionid="v1.6 id4486"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -578,21 +578,21 @@ _TRPEXIT_() { # Run on exit.
 	local RV="$?"
 	rm -rf "$TAMPDIR"
 	sleep 0.04
-	CDIRS=( bin boot dev etc home lib mnt opt proc root run sbin srv sys tmp usr var )
-	CDIRSV="0"
- 	for i in "${CDIRS[@]}" ; do
-		if $(ls -A $INSTALLDIR/$i 2>/dev/null)
-	then
-			CDIRSV="1"
-		fi
-		if [[ "$CDIRSV" = 1 ]] ; then
-			break
-		fi
-	done
-	if [[ "$CDIRSV" = 0 ]] ; then
-		rmdir $TAMPDIR
-		rmdir $INSTALLDIR
-	fi
+# 	CDIRS=( bin boot dev etc home lib mnt opt proc root run sbin srv sys tmp usr var )
+# 	CDIRSV="0"
+#  	for i in "${CDIRS[@]}" ; do
+# 		if $(ls -A $INSTALLDIR/$i 2>/dev/null)
+# 	then
+# 			CDIRSV="1"
+# 		fi
+# 		if [[ "$CDIRSV" = 1 ]] ; then
+# 			break
+# 		fi
+# 	done
+# 	if [[ "$CDIRSV" = 0 ]] ; then
+# 		rmdir $TAMPDIR
+# 		rmdir $INSTALLDIR
+# 	fi
 	if [[ "$RV" = 0 ]] ; then
 		printf "\\a\\e[0;32m%s %s \\a\\e[0m$versionid\\e[1;34m: \\a\\e[1;32m%s\\e[0m\\n\\n\\a\\e[0m" "${0##*/}" "$args" "DONE 🏁 "
 		printf "\\e]2; %s: %s \\007" "${0##*/} $args" "DONE 🏁 "

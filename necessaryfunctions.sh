@@ -107,7 +107,6 @@ _MAKEFINISHSETUP_() {
 	BINFNSTP=finishsetup.sh  
 	_CFLHDR_ root/bin/"$BINFNSTP"
 	cat >> root/bin/"$BINFNSTP" <<- EOM
-versionid="v1.6 id6379"
 	printf "\\n\\e[0;32m%s\\e[1;32m%s\\e[0;32m%s\\e[1;32m%s\\e[0;32m%s\\n\\n\\e[1;32m%s\\e[0;32m" "To generate locales in a preferred language, you can use " "Settings > Language & Keyboard > Language " "in Android.  Then run " "${0##*/} r " "for a quick system refresh." "==> "
    	locale-gen ||:
 	printf "\\n\\e[1;34m:: \\e[1;37mRemoving redundant packages for Termux PRoot installation…\\n"
@@ -152,7 +151,6 @@ versionid="v1.6 id6379"
 _MAKESETUPBIN_() {
 	_CFLHDR_ root/bin/setupbin.sh 
 	cat >> root/bin/setupbin.sh <<- EOM
-versionid="v1.6 id6379"
 	EOM
 	echo "$PROOTSTMNT /root/bin/finishsetup.sh ||:" >> root/bin/setupbin.sh 
 	chmod 700 root/bin/setupbin.sh
@@ -162,7 +160,6 @@ _MAKESTARTBIN_() {
 	_CFLHDR_ "$startbin" 
 	printf "%s\\n" "${FLHDRP[@]}" >> "$startbin"
 	cat >> "$startbin" <<- EOM
-versionid="v1.6 id6379"
 	declare -g ar2ar="\${@:2}"
 	declare -g ar3ar="\${@:3}"
 	_PRINTUSAGE_() { 
@@ -176,10 +173,10 @@ versionid="v1.6 id6379"
 	cat >> "$startbin" <<- EOM
 		printf '\033]2; TermuxArch $startbin 📲  \007'
 	# [?|help] Displays usage information.
-	elif [[ "\$1" = [?]* ]] || [[ "\$1" = -[?]* ]] || [[ "\$1" = --[?]* ]] || [[ "\$1" = [Hh]* ]] || [[ "\$1" = -[Hh]* ]] || [[ "\$1" = --[Hh]* ]];then
+	elif [[ "\${1//-}" = [?]* ]] || [[ "\${1//-}" = [Hh]* ]] ; then
 		_PRINTUSAGE_
 	# [command args] Execute a command in BASH as root.
-	elif [[ "\$1" = [Cc]* ]] || [[ "\$1" = -[Cc]* ]] || [[ "\$1" = --[Cc]* ]];then
+	elif [[ "\${1//-}" = [Cc]* ]] ; then
 		printf '\033]2; $startbin command args 📲  \007'
 		touch $INSTALLDIR/root/.chushlogin
 	EOM
@@ -188,21 +185,21 @@ versionid="v1.6 id6379"
 		printf '\033]2; $startbin command args 📲  \007'
 		rm -f $INSTALLDIR/root/.chushlogin
 	# [login user|login user [options]] Login as user [plus options].  Use \`addauser user\` first to create this user and the user's home directory.
-	elif [[ "\$1" = [Ll]* ]] || [[ "\$1" = -[Ll]* ]] || [[ "\$1" = --[Ll]* ]] || [[ "\$1" = [Uu]* ]] || [[ "\$1" = -[Uu]* ]] || [[ "\$1" = --[Uu]* ]] ;then
+	elif [[ "\${1//-}" = [Ll]* ]] || [[ "\${1//-}" = [Uu]* ]] ; then
 		printf '\033]2; $startbin login user [options] 📲  \007'
 	EOM
 		echo "$PROOTSTMNT /bin/su - \"\$ar2ar\" " >> "$startbin"
 	cat >> "$startbin" <<- EOM
 		printf '\033]2; $startbin login user [options] 📲  \007'
 	# [raw args] Construct the \`startarch\` proot statement.  For example \`startarch r su - archuser\` will login as user archuser.  Use \`addauser user\` first to create this user and the user home directory.
-	elif [[ "\$1" = [Rr]* ]] || [[ "\$1" = -[Rr]* ]] || [[ "\$1" = --[Rr]* ]];then
+	elif [[ "\${1//-}" = [Rr]* ]] ; then
 		printf '\033]2; $startbin raw args 📲  \007'
 	EOM
 		echo "$PROOTSTMNT /bin/\"\$ar2ar\" " >> "$startbin"
 	cat >> "$startbin" <<- EOM
 		printf '\033]2; $startbin raw args 📲  \007'
 	# [su user command] Login as user and execute command.  Use \`addauser user\` first to create this user and the user's home directory.
-	elif [[ "\$1" = [Ss]* ]] || [[ "\$1" = -[Ss]* ]] || [[ "\$1" = --[Ss]* ]];then
+	elif [[ "\${1//-}" = [Ss]* ]] ; then
 		printf '\033]2; $startbin su user command 📲  \007'
 		if [[ "\$2" = root ]];then
 			touch $INSTALLDIR/root/.chushlogin

@@ -132,7 +132,6 @@ addch() {
 	_CFLHDR_ root/bin/ch "# Creates .hushlogin and .hushlogout file"
 	cat >> root/bin/ch <<- EOM
 	declare -a args
-versionid="v1.6 id6379"
 
 	_TRPET_() { # on exit
 		printf "\\e[?25h\\e[0m"
@@ -347,7 +346,6 @@ addkeys() {
 	_CFLHDR_ root/bin/keys 
 	cat >> root/bin/keys <<- EOM
 	declare -a keyrings
-versionid="v1.6 id6379"
 
 	_TRPET_() { # on exit
 		printf "\\e[?25h\\e[0m"
@@ -415,7 +413,7 @@ addmotd() {
 
 addmoto() {
 	cat > etc/moto  <<- EOM
-	printf "\n\e[1;34mChat: \e[0mwebchat.freenode.net/ #termux\n\e[1;34mHelp: \e[0;34minfo query \e[1;34mand \e[0;34mman query\n\e[1;34mIRC:  \e[0mwiki.archlinux.org/index.php/IRC_channel\n\n\e[0m"
+	printf "\n\e[1;34mShare Your Arch Linux in Termux Experience!\n\n\e[1;34mChat: \e[0mwebchat.freenode.net/ #termux\n\e[1;34mHelp: \e[0;34minfo query \e[1;34mand \e[0;34mman query\n\e[1;34mIRC:  \e[0mwiki.archlinux.org/index.php/IRC_channel\n\n\e[0m"
 	EOM
 }
 
@@ -423,7 +421,6 @@ addpc() {
 	_CFLHDR_ root/bin/pc "# Pacman install packages wrapper without system update."
 	cat >> root/bin/pc  <<- EOM
 	declare -g args="\$@"
-versionid="v1.6 id6379"
 
 	_TRPET_() { # on exit
 		printf "\\e[?25h\\e[0m"
@@ -460,7 +457,6 @@ addpci() {
 	_CFLHDR_ root/bin/pci "# Pacman install packages wrapper with system update."
 	cat >> root/bin/pci  <<- EOM
 	declare args="\$@"
-versionid="v1.6 id6379"
 
 	_TRPET_() { # on exit
 		printf "\\e[?25h\\e[0m"
