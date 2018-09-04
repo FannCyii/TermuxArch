@@ -156,12 +156,17 @@ addch() {
 
 	if [[ -f "\$HOME"/.hushlogin ]] && [[ -f "\$HOME"/.hushlogout ]] ; then
 		rm "\$HOME"/.hushlogin "\$HOME"/.hushlogout
+		echo "Hush login and logout: OFF"
 	elif [[ -f "\$HOME"/.hushlogin ]] || [[ -f "\$HOME"/.hushlogout ]] ; then
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
 		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
+		echo 
+		echo "Hush login and logout: ON"
 	else
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
 		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
+		echo 
+		echo "Hush login and logout: ON"
 	fi
 	EOM
 	chmod 700 root/bin/ch 

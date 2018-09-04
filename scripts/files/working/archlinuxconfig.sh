@@ -160,12 +160,12 @@ addch() {
 	elif [[ -f "\$HOME"/.hushlogin ]] || [[ -f "\$HOME"/.hushlogout ]] ; then
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
 		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-
+		echo 
 		echo "Hush login and logout: ON"
 	else
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
 		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-
+		echo 
 		echo "Hush login and logout: ON"
 	fi
 	EOM
