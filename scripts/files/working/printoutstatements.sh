@@ -15,7 +15,7 @@ FLHDR1[7]="IFS=$'\\n\\t'"
 FLHDR1[8]="set -Eeuo pipefail"
 FLHDR1[9]="shopt -s nullglob globstar"
 FLHDR1[10]="unset LD_PRELOAD"
-FLHDR1[11]="versionid="gen.v1.6 id161195434907""
+FLHDR1[11]=\versionid=gen.v1.6 id832631419418\
 FLHDR1[12]=" "
 FLHDRP[0]="## BEGIN #######################################################################"
 FLHDRP[1]="LD_PRELOAD=\"env /data/data/com.termux/files/usr/lib/libandroid-shmem.so\""
@@ -60,7 +60,6 @@ TRAPS[3]="trap _TRPQ_ QUIT"
 TRAPS[4]=" "
 
 _CFLHDR_() { #	Create file headers, and interests comments.  
-versionid="v1.6 id4029"
   	if [[ -z "${2:-}" ]] ; then
 		printf "%s\\n" "${FLHDR0[@]}" > "$1"
 		printf "%s\\n" "${FLHDR1[@]}" >> "$1"
@@ -74,8 +73,6 @@ versionid="v1.6 id4029"
 	printf "%s\\n" "${TRPSIGNAL[@]}" >> "$1"
 	printf "%s\\n" "${TRPQUIT[@]}" >> "$1"
  	printf "%s\\n" "${TRAPS[@]}" >> "$1"
-# echo "$versionid"
-# exit
 }
 
 _PRINTCONTACTING_() {
