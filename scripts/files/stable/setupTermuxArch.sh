@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id065602024573"
+versionid="v1.6.id1506"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -226,6 +226,7 @@ intro() {
 	_SETROOT_EXCEPTION_ 
 	printf "\\n\\e[0;34m 🕛 > 🕛 \\e[1;34mTermuxArch $versionid shall attempt to install Linux in \\e[0;32m$INSTALLDIR\\e[1;34m.  Arch Linux in Termux PRoot shall be available upon successful completion.  To run this BASH script again, use \`!!\`.  Ensure background data is not restricted.  Check the wireless connection if you do not see one o'clock 🕐 below.  "
 	dependsblock "$@" 
+	_CFLHDR_ 
 	if [[ "$lcc" = "1" ]] ; then
 		loadimage "$@" 
 	else
@@ -648,7 +649,7 @@ declare CPUABI7="armeabi-v7a"
 declare CPUABI8="arm64-v8a"
 declare CPUABIX86="x86"
 declare CPUABIX86_64="x86_64"
-declare DFL="/gen"	## Used for development 
+declare DFL=""	## Used for development.  
 declare dm="wget"	## download manager
 declare DMVERBOSE="-q"	## -v for verbose download manager output from curl and wget;  for verbose output throughout runtime also change in `setupTermuxArchConfigs.sh` when using `setupTermuxArch.sh manual`. 
 declare	ed=""
