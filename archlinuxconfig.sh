@@ -7,6 +7,7 @@
 ################################################################################
 
 addREADME() {
+	_CFLHDR_ root/bin/README.md 
 	cat > root/bin/README.md <<- EOM
 	This directory contains shortcut commands to automate and ease using the command line in Arch Linux in Termux PRoot.
 	
@@ -152,21 +153,17 @@ addch() {
 		args="\$@"
 	fi
 
-	printf "\\\\n\\\\e[1;32m==> \\\\e[1;37m%s \\\\e[1;32m%s %s %s\\\e[0m%s\\\\b…\\\\n\\\\n" "Running" "TermuxArch \$(basename "\$0")" "\$args" "\$versionid"  
+	printf "\\\\n\\\\e[1;32m==> \\\\e[1;37m%s \\\\e[1;32m%s %s %s\\\e[0m%s…\\\\n\\\\n" "Running" "TermuxArch \$(basename "\$0")" "\$args" "\$versionid"  
 
 	if [[ -f "\$HOME"/.hushlogin ]] && [[ -f "\$HOME"/.hushlogout ]] ; then
 		rm "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-		echo "Hush login and logout: OFF"
+		echo "Hushed login and logout: OFF"
 	elif [[ -f "\$HOME"/.hushlogin ]] || [[ -f "\$HOME"/.hushlogout ]] ; then
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-		echo 
-		echo "Hush login and logout: ON"
+		echo "Hushed login and logout: ON"
 	else
 		touch "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-		ls "\$HOME"/.hushlogin "\$HOME"/.hushlogout
-		echo 
-		echo "Hush login and logout: ON"
+		echo "Hushed login and logout: ON"
 	fi
 	EOM
 	chmod 700 root/bin/ch 
@@ -191,6 +188,7 @@ adddfa() {
 }
 
 addfbindprocshmem() {
+	_CFLHDRS_ var/binds/fbindprocshmem.prs  
 	cat > var/binds/fbindprocshmem.prs  <<- EOM
 	PROOTSTMNT+="-b $INSTALLDIR/var/binds/fbindprocshmem:/proc/shmem " 
 	EOM
@@ -255,7 +253,7 @@ addfbindprocstat8() {
 }
 
 addfbindexample() {
-	_CFLHDR_ var/binds/fbindexample.prs "# To regenerate the start script use \`setupTermuxArch.sh re[fresh[\`.  Add as many proot statements as you want; The init script will parse this file at refresh.  An example is included for convenience.  Usage: PROOTSTMNT+=\"-b host_path:guest_path \" The space before the last double quote is necessary."
+	_CFLHDRS_ var/binds/fbindexample.prs "# To regenerate the start script use \`setupTermuxArch.sh re[fresh[\`.  Add as many proot statements as you want; The init script will parse this file at refresh.  An example is included for convenience.  Usage: PROOTSTMNT+=\"-b host_path:guest_path \" The space before the last double quote is necessary." 
 	cat >> var/binds/fbindexample.prs <<- EOM
 	# PROOTSTMNT+="-b $INSTALLDIR/var/binds/fbindprocstat:/proc/stat " 
 	# if [[ ! -r /dev/shm ]] ; then 
