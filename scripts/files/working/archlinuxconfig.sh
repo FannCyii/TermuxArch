@@ -717,7 +717,10 @@ addwe() {
 	}
 
 	# [we sequential] Run sequential watch entropy.
-	if [[ \$1 = [Ss][Ee]* ]] || [[ \$1 = -[Ss][Ee]* ]] || [[ \$1 = --[Ss][Ee]* ]];then
+	if [[ -z "\${1:-}" ]] ; then
+		printintro 
+		entropysequential 
+	elif [[ \$1 = [Ss][Ee]* ]] || [[ \$1 = -[Ss][Ee]* ]] || [[ \$1 = --[Ss][Ee]* ]];then
 		printintro 
 		entropysequential 
 	# [we simple] Run simple watch entropy.
