@@ -11,14 +11,13 @@ FLHDR0[1]="# Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 �
 FLHDR0[2]="# Hosting sdrausty.github.io/TermuxArch courtesy https://pages.github.com." 
 FLHDR0[3]="# https://sdrausty.github.io/TermuxArch/README has info about this project."
 FLHDR0[4]="# https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help." 
-FLHDR1[5]="################################################################################"
-FLHDR1[7]="IFS=$'\\n\\t'"
-FLHDR1[8]="set -Eeuo pipefail"
-FLHDR1[9]="shopt -s nullglob globstar"
-FLHDR1[10]="unset LD_PRELOAD"
-FLHDR1[11]="versionid=gen.v1.6.id253461942179"
-FLHDR1[11]="versionid=gen.v1.6.id253461942179"
-FLHDR1[12]=" "
+FLHDR1[0]="################################################################################"
+FLHDR1[1]="IFS=$'\\n\\t'"
+FLHDR1[2]="set -Eeuo pipefail"
+FLHDR1[3]="shopt -s nullglob globstar"
+FLHDR1[4]="unset LD_PRELOAD"
+FLHDR1[5]="versionid=gen.v1.6.id253461942179"
+FLHDR1[6]=" "
 FLHDRP[0]="## BEGIN #######################################################################"
 FLHDRP[1]="LD_PRELOAD=\"env /data/data/com.termux/files/usr/lib/libandroid-shmem.so\""
 TRPERROR[0]="_TRPERR_() {  #	Run on script error."
@@ -59,7 +58,24 @@ TRAPS[2]="trap _TRPSIG_ HUP INT TERM"
 TRAPS[3]="trap _TRPQ_ QUIT"
 TRAPS[4]=" "
 
-_CFLHDR_() { #	Create file headers, and interests comments.  
+_CFLHD_() { #	Creates file header and interests comments.  
+  	if [[ -z "${2:-}" ]] ; then
+		printf "%s\\n" "${FLHDR0[1]}" > "$1"
+		printf "%s\\n" "${FLHDR0[2]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[3]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[4]}" >> "$1"
+		printf "%s\\n" "${FLHDR1[0]}" >> "$1"
+  	else
+		printf "%s\\n" "${FLHDR0[1]}" > "$1"
+		printf "%s\\n" "${FLHDR0[2]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[3]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[4]}" >> "$1"
+   		printf "%s\\n"  "${@:2}" >> "$1"
+		printf "%s\\n" "${FLHDR1[0]}" >> "$1"
+  	fi
+}
+
+_CFLHDR_() { #	Creates BASH script boilerplate, file header and interests comments.  
   	if [[ -z "${2:-}" ]] ; then
 		printf "%s\\n" "${FLHDR0[@]}" > "$1"
 		printf "%s\\n" "${FLHDR1[@]}" >> "$1"
@@ -73,6 +89,23 @@ _CFLHDR_() { #	Create file headers, and interests comments.
 	printf "%s\\n" "${TRPSIGNAL[@]}" >> "$1"
 	printf "%s\\n" "${TRPQUIT[@]}" >> "$1"
  	printf "%s\\n" "${TRAPS[@]}" >> "$1"
+}
+
+_CFLHDRS_() { #	Creates file header and interests comments.  
+  	if [[ -z "${2:-}" ]] ; then
+		printf "%s\\n" "${FLHDR0[1]}" > "$1"
+		printf "%s\\n" "${FLHDR0[2]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[3]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[4]}" >> "$1"
+		printf "%s\\n" "${FLHDR1[0]}" >> "$1"
+  	else
+		printf "%s\\n" "${FLHDR0[1]}" > "$1"
+		printf "%s\\n" "${FLHDR0[2]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[3]}" >> "$1"
+		printf "%s\\n" "${FLHDR0[4]}" >> "$1"
+   		printf "%s\\n"  "${@:2}" >> "$1"
+		printf "%s\\n" "${FLHDR1[0]}" >> "$1"
+  	fi
 }
 
 _PRINTCONTACTING_() {
