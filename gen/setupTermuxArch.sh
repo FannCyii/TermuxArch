@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id767334063214"
+versionid="gen.v1.6.id253461942179"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -606,7 +606,6 @@ _TRPEXIT_() { # Run on exit.
 	fi
 	printf "\\e[?25h\\e[0m"
 	set +Eeuo pipefail 
-	disown 
 	exit
 }
 
