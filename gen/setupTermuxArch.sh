@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id791624202058"
+versionid="gen.v1.6.id713537748391"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -241,12 +241,12 @@ introbloom() { # Bloom = `setupTermuxArch.sh manual verbose`
 	bloom 
 }
 
-introsysinfo() {
+_INTROSYSINFO_() {
 	printf '\033]2;  bash setupTermuxArch.sh sysinfo 📲 \007'
 	printf "\\n\\e[0;34m 🕛 > 🕛 \\e[1;34msetupTermuxArch $versionid shall create a system information file.  Ensure background data is not restricted.  Run \\e[0;32mbash setupTermuxArch.sh help \\e[1;34mfor additional information.  Check the wireless connection if you do not see one o'clock 🕐 below.  "
 	_PREPTERMUXARCH_
 	dependsblock "$@" 
-	sysinfo 
+	_SYSINFO_ 
 }
 
 introrefresh() {
@@ -351,7 +351,7 @@ _OPT2_() {
 		echo Setting mode to sysinfo.
 		shift
 		_ARG2DIR_ "$@" 
-		introsysinfo "$@"  
+		_INTROSYSINFO_ "$@"  
 	elif [[ "$2" = [Ii]* ]] ; then
 		echo Setting mode to install.
 		shift
@@ -727,7 +727,7 @@ elif [[ "${1//-}" = [Aa][Xx][Dd]* ]] || [[ "${1//-}" = [Aa][Xx][Ss]* ]] ; then
 	dm=axel
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [ax[el] [customdir]|axi [customdir]]  Install Arch Linux with `axel`.
 elif [[ "${1//-}" = [Aa][Xx]* ]] || [[ "${1//-}" = [Aa][Xx][Ii]* ]] ; then
 	echo
@@ -742,7 +742,7 @@ elif [[ "${1//-}" = [Aa][Dd]* ]] || [[ "${1//-}" = [Aa][Ss]* ]] ; then
 	dm=aria2c
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [a[ria2c] [customdir]|ai [customdir]]  Install Arch Linux with `aria2c`.
 elif [[ "${1//-}" = [Aa]* ]] ; then
 	echo
@@ -762,7 +762,7 @@ elif [[ "${1//-}" = [Cc][Dd]* ]] || [[ "${1//-}" = [Cc][Ss]* ]] ; then
 	dm=curl
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [c[url] [customdir]|ci [customdir]]  Install Arch Linux with `curl`.
 elif [[ "${1//-}" = [Cc][Ii]* ]] || [[ "${1//-}" = [Cc]* ]] ; then
 	echo
@@ -776,7 +776,7 @@ elif [[ "${1//-}" = [Dd]* ]] || [[ "${1//-}" = [Ss]* ]] ; then
 	echo Setting mode to sysinfo.
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [he[lp]|?]  Display terse builtin help.
 elif [[ "${1//-}" = [Hh][Ee]* ]] || [[ "${1//-}" = [?]* ]] ; then
 	_ARG2DIR_ "$@" 
@@ -799,7 +799,7 @@ elif [[ "${1//-}" = [Ll][Dd]* ]] || [[ "${1//-}" = [Ll][Ss]* ]] ; then
 	dm=lftp
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [l[ftp] [customdir]]  Install Arch Linux with `lftp`.
 elif [[ "${1//-}" = [Ll]* ]] ; then
 	echo
@@ -844,7 +844,7 @@ elif [[ "${1//-}" = [Ww][Dd]* ]] || [[ "${1//-}" = [Ww][Ss]* ]] ; then
 	dm=wget
 	shift
 	_ARG2DIR_ "$@" 
-	introsysinfo "$@" 
+	_INTROSYSINFO_ "$@" 
 ## [w[get] [customdir]]  Install Arch Linux with `wget`.
 elif [[ "${1//-}" = [Ww]* ]] ; then
 	echo
