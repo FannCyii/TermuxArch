@@ -43,11 +43,11 @@ bloom() { # Bloom = `setupTermuxArch.sh manual verbose`
 
 _COPYSTARTBIN2PATHQ_() {
 	while true; do
-	printf "\\e[0;34m 🕛 > 🕚 \\e[0mCopy \\e[1m$STARTBIN\\e[0m to \\e[1m$BPATH\\e[0m?  "'\033]2; 🕛 > 🕚 Copy to $PATH [Y|n]?\007'
+	printf "\\e[0;34m 🕛 > 🕚 \\e[0mCopy \\e[1m$startbin\\e[0m to \\e[1m$BPATH\\e[0m?  "'\033]2; 🕛 > 🕚 Copy to $PATH [Y|n]?\007'
 	read -n 1 -p "Answer yes or no [Y|n] " answer
 	if [[ "$answer" = [Yy]* ]] || [[ "$answer" = "" ]];then
-		cp "$INSTALLDIR/$STARTBIN" "$BPATH"
-		printf "\\n\\e[0;34m 🕛 > 🕦 \\e[0mCopied \\e[1m$STARTBIN\\e[0m to \\e[1m$BPATH\\e[0m.\\n\\n"
+		cp "$INSTALLDIR/$startbin" "$BPATH"
+		printf "\\n\\e[0;34m 🕛 > 🕦 \\e[0mCopied \\e[1m$startbin\\e[0m to \\e[1m$BPATH\\e[0m.\\n\\n"
 		break
 	elif [[ "$answer" = [Nn]* ]] || [[ "$answer" = [Qq]* ]];then
 		printf "\\n"

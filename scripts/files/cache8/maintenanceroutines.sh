@@ -110,7 +110,7 @@ loadimage() {
 	_WAKEUNLOCK_ 
 	_PRINTFOOTER_
 	set +Eeuo pipefail
-	"$INSTALLDIR/$STARTBIN" ||:
+	"$INSTALLDIR/$startbin" ||:
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
 	_PRINTFOOTER2_
@@ -168,7 +168,7 @@ refreshsys() { # Refreshes
  	rm -f root/bin/finishsetup.sh
  	rm -f root/bin/setupbin.sh 
 	printf "\\e[1;34mThe following files have been updated to the newest version.\\n\\n\\e[0;32m"
-	ls "$INSTALLDIR/$STARTBIN" |cut -f7- -d /
+	ls "$INSTALLDIR/$startbin" |cut -f7- -d /
 	ls "$INSTALLDIR"/bin/we |cut -f7- -d /
 	ls "$INSTALLDIR"/root/bin/* |cut -f7- -d /
 	printf "\\n" 
@@ -178,7 +178,7 @@ refreshsys() { # Refreshes
 	sleep 0.015
 	printf "\\a"
 	set +Eeuo pipefail
-	"$INSTALLDIR/$STARTBIN" ||:
+	"$INSTALLDIR/$startbin" ||:
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
 	_PRINTFOOTER2_

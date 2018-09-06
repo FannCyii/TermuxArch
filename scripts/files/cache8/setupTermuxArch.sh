@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id681366043399"
+versionid="gen.v1.6.id713537748391"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -338,7 +338,7 @@ _NAMESTARTARCH_() { # ${@%/} removes trailing slash
  		aarch="$(echo "$darch" |sed 's/\//\+/g')"
 		startbi2=arch
 	fi
-	declare -g STARTBIN=start"$startbi2$aarch"
+	declare -g startbin=start"$startbi2$aarch"
 }
 
 _OPT2_() { 
@@ -445,9 +445,9 @@ _PRINTSHA512SYSCHKER_() {
 _PRINTSTARTBIN_USAGE_() {
 	printf "\\n\\e[1;32m" 
  	_NAMESTARTARCH_ 
-	if [[ -x "$(command -v "$STARTBIN")" ]] ; then
-		echo "$STARTBIN" help 
-		"$STARTBIN" help 
+	if [[ -x "$(command -v "$startbin")" ]] ; then
+		echo "$startbin" help 
+		"$startbin" help 
 	fi
 }
 
@@ -486,15 +486,15 @@ _RMARCH_() {
 			break
 		elif [[ "$RUANSWER" = [Yy]* ]] || [[ "$RUANSWER" = "" ]] ; then
 			printf "\\e[30mUninstalling $INSTALLDIR…\\n"
-			if [[ -e "$PREFIX/bin/$STARTBIN" ]] ; then
-				rm -f "$PREFIX/bin/$STARTBIN" 
+			if [[ -e "$PREFIX/bin/$startbin" ]] ; then
+				rm -f "$PREFIX/bin/$startbin" 
 			else 
-				printf "Uninstalling $PREFIX/bin/$STARTBIN: nothing to do for $PREFIX/bin/$STARTBIN.\\n"
+				printf "Uninstalling $PREFIX/bin/$startbin: nothing to do for $PREFIX/bin/$startbin.\\n"
 			fi
-			if [[ -e "$HOME/bin/$STARTBIN" ]] ; then
-				rm -f "$HOME/bin/$STARTBIN" 
+			if [[ -e "$HOME/bin/$startbin" ]] ; then
+				rm -f "$HOME/bin/$startbin" 
 			else 
-				printf "Uninstalling $HOME/bin/$STARTBIN: nothing to do for $HOME/bin/$STARTBIN.\\n"
+				printf "Uninstalling $HOME/bin/$startbin: nothing to do for $HOME/bin/$startbin.\\n"
 			fi
 			if [[ -d "$INSTALLDIR" ]] ; then
 				_RMARCHRM_ 
@@ -585,7 +585,7 @@ _TRPEXIT_() { # Run on exit.
 # 	CDIRS=( bin boot dev etc home lib mnt opt proc root run sbin srv sys tmp usr var )
 # 	CDIRSV="0"
 #  	for i in "${CDIRS[@]}" ; do
-# 		if $(head -n 4 ls -A $INSTALLDIR/$i 2>/dev/null)
+# 		if $(ls -A $INSTALLDIR/$i 2>/dev/null)
 # 	then
 # 			CDIRSV="1"
 # 		fi

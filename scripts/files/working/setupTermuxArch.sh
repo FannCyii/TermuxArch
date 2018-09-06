@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id713537748391"
+versionid="gen.v1.6.id681366043399"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -85,7 +85,7 @@ chk() {
 			manual
 		fi
 	else
-		printsha512syschker
+		_PRINTSHA512SYSCHKER_
 	fi
 }
 
@@ -98,7 +98,7 @@ chkdwn() {
 	 		proot --link2symlink -0 "$PREFIX"/bin/applets/tar xf setupTermuxArch.tar.gz 
 		fi
 	else
-		printsha512syschker
+		_PRINTSHA512SYSCHKER_
 	fi
 }
 
@@ -338,7 +338,7 @@ _NAMESTARTARCH_() { # ${@%/} removes trailing slash
  		aarch="$(echo "$darch" |sed 's/\//\+/g')"
 		startbi2=arch
 	fi
-	declare -g startbin=start"$startbi2$aarch"
+	declare -g STARTBIN=start"$startbi2$aarch"
 }
 
 _OPT2_() { 
@@ -418,7 +418,7 @@ pechk() {
 	fi
 }
 
-preptmpdir() { 
+_PREPTMPDIR_() { 
 	mkdir -p "$INSTALLDIR/tmp"
 	chmod 777 "$INSTALLDIR/tmp"
 	chmod +t "$INSTALLDIR/tmp"
@@ -429,14 +429,14 @@ preptmpdir() {
 _PREPTERMUXARCH_() { 
 	_NAMEINSTALLDIR_ 
 	_NAMESTARTARCH_  
-	preptmpdir
+	_PREPTMPDIR_
 }
 
 _PRINTCONFLOADED_() {
 	printf "\\n\\e[0;34m%s \\e[1;34m%s \\e[0;32m%s\\e[1;32m%s \\e[1;34m%s \\e[1;32m%s\\n" " 🕛 > 🕑" "TermuxArch configuration" "$wdir" "setupTermuxArchConfigs.sh" "loaded:" "OK"
 }
 
-printsha512syschker() {
+_PRINTSHA512SYSCHKER_() {
 	printf "\\n\\e[07;1m\\e[31;1m\\n%s \\e[34;1m\\e[30;1m%s \\n\\e[0;0m\\n" " 🔆 WARNING sha512sum mismatch!  Setup initialization mismatch!" "  Try again, initialization was not successful this time.  Wait a little while.  Then run \`bash setupTermuxArch.sh\` again…"
 	printf '\033]2; Run `bash setupTermuxArch.sh %s` again…\007' "$args" 
 	exit 
@@ -445,9 +445,9 @@ printsha512syschker() {
 _PRINTSTARTBIN_USAGE_() {
 	printf "\\n\\e[1;32m" 
  	_NAMESTARTARCH_ 
-	if [[ -x "$(command -v "$startbin")" ]] ; then
-		echo "$startbin" help 
-		"$startbin" help 
+	if [[ -x "$(command -v "$STARTBIN")" ]] ; then
+		echo "$STARTBIN" help 
+		"$STARTBIN" help 
 	fi
 }
 
@@ -476,51 +476,51 @@ prootif() {
 	fi
 }
 
-rmarch() {
+_RMARCH_() {
 	_NAMESTARTARCH_ 
 	_NAMEINSTALLDIR_
 	while true; do
 		printf "\\n\\e[1;30m"
-		read -n 1 -p "Uninstall $INSTALLDIR? [Y|n] " ruanswer
-		if [[ "$ruanswer" = [Ee]* ]] || [[ "$ruanswer" = [Nn]* ]] || [[ "$ruanswer" = [Qq]* ]] ; then
+		read -n 1 -p "Uninstall $INSTALLDIR? [Y|n] " RUANSWER
+		if [[ "$RUANSWER" = [Ee]* ]] || [[ "$RUANSWER" = [Nn]* ]] || [[ "$RUANSWER" = [Qq]* ]] ; then
 			break
-		elif [[ "$ruanswer" = [Yy]* ]] || [[ "$ruanswer" = "" ]] ; then
+		elif [[ "$RUANSWER" = [Yy]* ]] || [[ "$RUANSWER" = "" ]] ; then
 			printf "\\e[30mUninstalling $INSTALLDIR…\\n"
-			if [[ -e "$PREFIX/bin/$startbin" ]] ; then
-				rm -f "$PREFIX/bin/$startbin" 
+			if [[ -e "$PREFIX/bin/$STARTBIN" ]] ; then
+				rm -f "$PREFIX/bin/$STARTBIN" 
 			else 
-				printf "Uninstalling $PREFIX/bin/$startbin: nothing to do for $PREFIX/bin/$startbin.\\n"
+				printf "Uninstalling $PREFIX/bin/$STARTBIN: nothing to do for $PREFIX/bin/$STARTBIN.\\n"
 			fi
-			if [[ -e "$HOME/bin/$startbin" ]] ; then
-				rm -f "$HOME/bin/$startbin" 
+			if [[ -e "$HOME/bin/$STARTBIN" ]] ; then
+				rm -f "$HOME/bin/$STARTBIN" 
 			else 
-				printf "Uninstalling $HOME/bin/$startbin: nothing to do for $HOME/bin/$startbin.\\n"
+				printf "Uninstalling $HOME/bin/$STARTBIN: nothing to do for $HOME/bin/$STARTBIN.\\n"
 			fi
 			if [[ -d "$INSTALLDIR" ]] ; then
-				rmarchrm 
+				_RMARCHRM_ 
 			else 
 				printf "Uninstalling $INSTALLDIR: nothing to do for $INSTALLDIR.\\n"
 			fi
 			printf "Uninstalling $INSTALLDIR: \\e[1;32mDone\\n\\e[30m"
 			break
 		else
-			printf "\\nYou answered \\e[33;1m$ruanswer\\e[30m.\\n\\nAnswer \\e[32mYes\\e[30m or \\e[1;31mNo\\e[30m. [\\e[32my\\e[30m|\\e[1;31mn\\e[30m]\\n"
+			printf "\\nYou answered \\e[33;1m$RUANSWER\\e[30m.\\n\\nAnswer \\e[32mYes\\e[30m or \\e[1;31mNo\\e[30m. [\\e[32my\\e[30m|\\e[1;31mn\\e[30m]\\n"
 		fi
 	done
 	printf "\\e[0m\\n"
 }
 
-rmarchrm() {
+_RMARCHRM_() {
 	_SETROOT_EXCEPTION_ 
 	rm -rf "${INSTALLDIR:?}"/* 2>/dev/null ||:
 	find  "$INSTALLDIR" -type d -exec chmod 700 {} \; 2>/dev/null ||:
 	rm -rf "$INSTALLDIR" 2>/dev/null ||:
 }
 
-rmarchq() {
+_RMARCHQ_() {
 	if [[ -d "$INSTALLDIR" ]] ; then
 		printf "\\n\\e[0;33m %s \\e[1;33m%s \\e[0;33m%s\\n\\n\\e[1;30m%s\\n" "TermuxArch:" "DIRECTORY WARNING!  $INSTALLDIR/" "directory detected." "Purge $INSTALLDIR as requested?"
-		rmarch
+		_RMARCH_
 	fi
 }
 
@@ -585,7 +585,7 @@ _TRPEXIT_() { # Run on exit.
 # 	CDIRS=( bin boot dev etc home lib mnt opt proc root run sbin srv sys tmp usr var )
 # 	CDIRSV="0"
 #  	for i in "${CDIRS[@]}" ; do
-# 		if $(ls -A $INSTALLDIR/$i 2>/dev/null)
+# 		if $(head -n 4 ls -A $INSTALLDIR/$i 2>/dev/null)
 # 	then
 # 			CDIRSV="1"
 # 		fi
@@ -825,7 +825,7 @@ elif [[ "${1//-}" = [Pp]* ]] || [[ "${1//-}" = [Uu]* ]] ; then
 	echo 
 	echo Setting mode to purge.
 	_ARG2DIR_ "$@" 
-	rmarchq
+	_RMARCHQ_
 ## [r[e[fresh]] [customdir]]  Refresh the Arch Linux in Termux PRoot scripts created by TermuxArch and the installation itself.  Useful for refreshing the installation, locales and the TermuxArch generated scripts to their newest versions.  
 elif [[ "${1//-}" = [Rr][Ee]* ]] ; then
 	echo 
