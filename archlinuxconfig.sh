@@ -522,24 +522,24 @@ addt() {
 }
 
 addthstartarch() {
-	_CFLHDR_ root/bin/th"$startbin" 
-	cat >> root/bin/th"$startbin" <<- EOM
-	echo $startbin help
-	$startbin help
+	_CFLHDR_ root/bin/th"$STARTBIN" 
+	cat >> root/bin/th"$STARTBIN" <<- EOM
+	echo $STARTBIN help
+	$STARTBIN help
 	sleep 1
-	echo $startbin command "pwd && whoami"
-	$startbin command "pwd && whoami"
+	echo $STARTBIN command "pwd && whoami"
+	$STARTBIN command "pwd && whoami"
 	sleep 1
-	echo $startbin login user 
-	$startbin login user ||:
-	echo $startbin raw su user -c "pwd && whoami"
-	$startbin raw su user -c "pwd && whoami"
+	echo $STARTBIN login user 
+	$STARTBIN login user ||:
+	echo $STARTBIN raw su user -c "pwd && whoami"
+	$STARTBIN raw su user -c "pwd && whoami"
 	sleep 1
-	echo $startbin su user "pwd && whoami"
-	$startbin su user "pwd && whoami"
-	echo th$startbin done
+	echo $STARTBIN su user "pwd && whoami"
+	$STARTBIN su user "pwd && whoami"
+	echo th$STARTBIN done
 	EOM
-	chmod 700 root/bin/th"$startbin"
+	chmod 700 root/bin/th"$STARTBIN"
 }
 
 addtour() {

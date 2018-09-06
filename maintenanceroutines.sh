@@ -6,17 +6,17 @@
 # _STANDARD_="function name" && STANDARD="variable name" are under construction.
 ################################################################################
 
-sysinfo() {
-	spaceinfo
+_SYSINFO_() {
+	_SPACEINFO_
 	printf "\\n\\e[1;32mGenerating TermuxArch system information; Please wait…\\n\\n" 
-	systeminfo ## & spinner "Generating" "System Information…" 
+	_SYSTEMINFO_ ## & spinner "Generating" "System Information…" 
 	printf "\\e[38;5;76m"
 	cat "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\n\\e[1mThis information may be quite important when planning issue(s) at https://github.com/sdrausty/TermuxArch/issues with the hope of improving \`setupTermuxArch.sh\`;  Include input and output, along with screenshot(s) relavent to X, and similar.\\n\\n"
 	exit
 }
 
-systeminfo () {
+_SYSTEMINFO_ () {
 	printf "Begin TermuxArch system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\ndpkg --print-architecture result:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	dpkg --print-architecture >> "${wdir}setupTermuxArchSysInfo$STIME".log
@@ -94,7 +94,7 @@ copyimage() { # A systemimage.tar.gz file can be used: `setupTermuxArch.sh ./[pa
 
 loadimage() { 
 	_NAMESTARTARCH_ 
- 	spaceinfo
+ 	_SPACEINFO_
 	printf "\\n" 
 	_WAKELOCK_
 	_PREPINSTALLDIR_ 
@@ -110,7 +110,7 @@ loadimage() {
 	_WAKEUNLOCK_ 
 	_PRINTFOOTER_
 	set +Eeuo pipefail
-	"$INSTALLDIR/$startbin" ||:
+	"$INSTALLDIR/$STARTBIN" ||:
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
 	_PRINTFOOTER2_
@@ -120,7 +120,7 @@ loadimage() {
 refreshsys() { # Refreshes
 	printf '\033]2; setupTermuxArch.sh refresh 📲 \007'
  	_NAMESTARTARCH_  
- 	spaceinfo
+ 	_SPACEINFO_
 	cd "$INSTALLDIR"
 	_SETLANGUAGE_
 	addREADME
@@ -168,7 +168,7 @@ refreshsys() { # Refreshes
  	rm -f root/bin/finishsetup.sh
  	rm -f root/bin/setupbin.sh 
 	printf "\\e[1;34mThe following files have been updated to the newest version.\\n\\n\\e[0;32m"
-	ls "$INSTALLDIR/$startbin" |cut -f7- -d /
+	ls "$INSTALLDIR/$STARTBIN" |cut -f7- -d /
 	ls "$INSTALLDIR"/bin/we |cut -f7- -d /
 	ls "$INSTALLDIR"/root/bin/* |cut -f7- -d /
 	printf "\\n" 
@@ -178,25 +178,25 @@ refreshsys() { # Refreshes
 	sleep 0.015
 	printf "\\a"
 	set +Eeuo pipefail
-	"$INSTALLDIR/$startbin" ||:
+	"$INSTALLDIR/$STARTBIN" ||:
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
 	_PRINTFOOTER2_
 }
 
-spaceinfo() {
+_SPACEINFO_() {
 	declare spaceMessage=""
 	units="$(df "$INSTALLDIR" 2>/dev/null | awk 'FNR == 1 {print $2}')" 
 	if [[ "$units" = Size ]] ; then
-		spaceinfogsize 
+		_SPACEINFOGSIZE_ 
 		printf "$spaceMessage"
 	elif [[ "$units" = 1K-blocks ]] ; then
-		spaceinfoksize 
+		_SPACEINFOKSIZE_ 
 		printf "$spaceMessage"
 	fi
 }
 
-spaceinfogsize() {
+_SPACEINFOGSIZE_() {
 	userspace 
 	if [[ "$CPUABI" = "$CPUABIX86" ]] || [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
 		if [[ "$usrspace" = *G ]] ; then 
@@ -229,9 +229,9 @@ spaceinfogsize() {
 	fi
 }
 
-spaceinfoq() {
+_SPACEINFOQ_() {
 	if [[ "$suanswer" != [Yy]* ]] ; then
-		spaceinfo
+		_SPACEINFO_
 		if [[ -n "$spaceMessage" ]] ; then
 			while true; do
 				printf "\\n\\e[1;30m"
@@ -251,7 +251,7 @@ spaceinfoq() {
 	fi
 }
 
-spaceinfoksize() {
+_SPACEINFOKSIZE_() {
 	userspace 
 	if [[ "$CPUABI" = "$CPUABI8" ]] ; then
 		if [[ "$usrspace" -lt "1500000" ]] ; then
