@@ -44,7 +44,7 @@ addauser() {
 
 addbash_logout() {
 	cat > root/.bash_logout <<- EOM
-	if [ ! -e "\$HOME"/.hushlogout ] && [ ! -e "\$HOME"/.chushlogout ];then
+	if [ ! -e "\$HOME"/.hushlogout ] && [ ! -e "\$HOME"/.chushlogout ] ; then
 		. /etc/moto
 	fi
 	EOM
@@ -52,10 +52,10 @@ addbash_logout() {
 
 addbash_profile() {
 	cat > root/.bash_profile <<- EOM
-	if [ ! -e "\$HOME"/.hushlogin ] && [ ! -e "\$HOME"/.chushlogin ];then
+	if [ ! -e "\$HOME"/.hushlogin ] && [ ! -e "\$HOME"/.chushlogin ] ; then
 		. /etc/motd
 	fi
-	if [ -e "\$HOME"/.chushlogin ];then
+	if [ -e "\$HOME"/.chushlogin ] ; then
 		rm "\$HOME"/.chushlogin 
 	fi
 	PATH="\$HOME/bin:\$PATH"
@@ -148,7 +148,7 @@ addch() {
 
 	## ch begin ####################################################################
 
-	if [[ -z "\${1:-}" ]];then
+	if [[ -z "\${1:-}" ]] ; then
 		args=""
 	else
 		args="\$@"
@@ -208,7 +208,7 @@ addfbindprocshmem() {
 addfbindprocstat() { # Chooses the appropriate four or eight processor stat file. 
 	nessor="$(grep cessor /proc/cpuinfo)"
 	ncessor="${nessor: -1}"
-	if [[ "$ncessor" -le "3" ]];then
+	if [[ "$ncessor" -le "3" ]] ; then
 		addfbindprocstat4
 	else
 		addfbindprocstat8
@@ -382,7 +382,7 @@ addkeys() {
 	trap _TRPET_ EXIT
 	## keys begin ##################################################################
 
-	if [[ -z "\${1:-}" ]];then
+	if [[ -z "\${1:-}" ]] ; then
 	KEYRINGS[0]="archlinux-keyring"
 	KEYRINGS[1]="archlinuxarm-keyring"
 	elif [[ "\$1" = x86 ]]; then
@@ -444,13 +444,13 @@ addpc() {
 
 	printf '\033]2;  🔑🗝 TermuxArch '"\$(basename "\$0") \$args"' 📲 \007'
 	printf "\\\\n\\\\e[1;32m==> \\\\e[1;37m%s \\\\e[0;32m%s \\\\e[1;32m%s %s \\\e[0m%s…\\\\n\\\\n" "Running" "TermuxArch" "\$(basename "\$0")" "\$args" "\$versionid"  
-	if [[ -z "\${1:-}" ]];then
+	if [[ -z "\${1:-}" ]] ; then
 	pacman --noconfirm --color=always -S 
-	elif [[ "\$1" = "a" ]];then
+	elif [[ "\$1" = "a" ]] ; then
 	pacman --noconfirm --color=always -S base base-devel "\${@:2}" 
-	elif [[ "\$1" = "ae" ]];then
+	elif [[ "\$1" = "ae" ]] ; then
 	pacman --noconfirm --color=always -S base base-devel emacs "\${@:2}" 
-	elif [[ "\$1" = "a8" ]];then
+	elif [[ "\$1" = "a8" ]] ; then
 	pacman --noconfirm --color=always -S base base-devel emacs jdk8-openjdk "\${@:2}" 
 	else
 	pacman --noconfirm --color=always -S "\$@" 
@@ -479,13 +479,13 @@ addpci() {
 	## pci begin ###################################################################
 
 	printf "\\\\n\\\\e[1;32m==> \\\\e[1;37m%s \\\\e[1;32m%s %s %s \\\e[0m%s…\\\\n\\\\n" "Running" "TermuxArch \$(basename "\$0")" "\$args" "\$versionid"  
-	if [[ -z "\${1:-}" ]];then
+	if [[ -z "\${1:-}" ]] ; then
 	pacman --noconfirm --color=always -Syu
-	elif [[ "\$1" = "e" ]];then
+	elif [[ "\$1" = "e" ]] ; then
 	pacman --noconfirm --color=always -Syu base base-devel emacs "\${@:2}" 
-	elif [[ "\$1" = "e8" ]];then
+	elif [[ "\$1" = "e8" ]] ; then
 	pacman --noconfirm --color=always -Syu base base-devel emacs jdk8-openjdk "\${@:2}" 
-	elif [[ "\$1" = "e10" ]];then
+	elif [[ "\$1" = "e10" ]] ; then
 	pacman --noconfirm --color=always -Syu base base-devel emacs jdk10-openjdk "\${@:2}" 
 	else
 	pacman --noconfirm --color=always -Syu "\$@" 
@@ -630,7 +630,7 @@ addwe() {
 
 	infif()
 	{
-		if [[ \$entropy0 = "inf" ]] || [[ \$entropy0 = "" ]] || [[ \$entropy0 = "0" ]];then
+		if [[ \$entropy0 = "inf" ]] || [[ \$entropy0 = "" ]] || [[ \$entropy0 = "0" ]] ; then
 			entropy0=1000
 			printf "\e[1;32m∞^∞infifinfif2minfifinfifinfifinfif∞=1\e[0;32minfifinfifinfifinfif\e[0;32m∞==0infifinfifinfifinfif\e[0;32minfifinfifinfif∞"
 		fi
@@ -660,16 +660,16 @@ addwe() {
 	bcif()
 	{
 		commandif=\$(command -v getprop) ||:
-		if [[ \$commandif = "" ]];then
+		if [[ \$commandif = "" ]] ; then
 			abcif=\$(command -v bc) ||:
-			if [[ \$abcif = "" ]];then
+			if [[ \$abcif = "" ]] ; then
 				printf "\e[1;34mInstalling \e[0;32mbc\e[1;34m…\n\n\e[1;32m"
 				pacman -S bc --noconfirm --color=always
 				printf "\n\e[1;34mInstalling \e[0;32mbc\e[1;34m: \e[1;32mDONE\n\e[0m"
 			fi
 		else
 			tbcif=\$(command -v bc) ||:
-			if [[ \$tbcif = "" ]];then
+			if [[ \$tbcif = "" ]] ; then
 				printf "\e[1;34mInstalling \e[0;32mbc\e[1;34m…\n\n\e[1;32m"
 				pkg install bc --yes
 				printf "\n\e[1;34mInstalling \e[0;32mbc\e[1;34m: \e[1;32mDONE\n\e[0m"
@@ -726,20 +726,20 @@ addwe() {
 	if [[ -z "\${1:-}" ]] ; then
 		printintro 
 		entropysequential 
-	elif [[ \$1 = [Ss][Ee]* ]] || [[ \$1 = -[Ss][Ee]* ]] || [[ \$1 = --[Ss][Ee]* ]];then
+	elif [[ \$1 = [Ss][Ee]* ]] || [[ \$1 = -[Ss][Ee]* ]] || [[ \$1 = --[Ss][Ee]* ]] ; then
 		printintro 
 		entropysequential 
 	# [we simple] Run simple watch entropy.
-	elif [[ \$1 = [Ss]* ]] || [[ \$1 = -[Ss]* ]] || [[ \$1 = --[Ss]* ]];then
+	elif [[ \$1 = [Ss]* ]] || [[ \$1 = -[Ss]* ]] || [[ \$1 = --[Ss]* ]] ; then
 		printintro 
 		entropysimple 
 	# [we verbose] Run verbose watch entropy.
-	elif [[ \$1 = [Vv]* ]] || [[ \$1 = -[Vv]* ]] || [[ \$1 = --[Vv]* ]];then
+	elif [[ \$1 = [Vv]* ]] || [[ \$1 = -[Vv]* ]] || [[ \$1 = --[Vv]* ]] ; then
 		printintro 
 		bcif
 		entropyverbose 
 	# [] Run default watch entropy.
-	elif [[ \$1 = "" ]];then
+	elif [[ \$1 = "" ]] ; then
 		printintro 
 		entropysequential 
 	else
