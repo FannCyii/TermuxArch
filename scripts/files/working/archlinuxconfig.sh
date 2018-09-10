@@ -349,27 +349,27 @@ addgp() {
 addkeys() {
 	_CFLHDR_ root/bin/keys 
 	cat >> root/bin/keys <<- EOM
-	declare -a keyrings
-	t=0.4
+	declare -a KEYRINGS
+	T=0.4
 
 	_TRPET_() { # on exit
 		printf "\\e[?25h\\e[0m"
 		set +Eeuo pipefail 
-	 	_PRINTTAIL_ "\$keyrings[@]"  
+	 	_PRINTTAIL_ "\$KEYRINGS[@]"  
 	}
 	
-	genen() { # This for loop generates entropy on device for \$t seconds.
+	_GENEN_() { # This for loop generates entropy on device for \$t seconds.
 		n=2 # Number of loop generations for generating entropy.
 		t=256 # Maximum number of seconds loop shall run unless keys completes earlier.
 		for i in "\$(seq 1 "\$n")"; do
-			"\$(nice -n 20 find / -type f -exec cat {} \; >/dev/null 2>/dev/null & sleep "\$t" ; kill \$! 2>/dev/null)" 2>/dev/null &
-			sleep "\$t"
-			"\$(nice -n 20 ls -alR / >/dev/null 2>/dev/null & sleep "\$t" ; kill \$! 2>/dev/null)" 2>/dev/null &
-			sleep "\$t"
-			"\$(nice -n 20 find / >/dev/null 2>/dev/null & sleep "\$t" ; kill \$! 2>/dev/null)" 2>/dev/null &
-			sleep "\$t"
-			"\$(nice -n 20 cat /dev/urandom >/dev/null 2>/dev/null & sleep "\$t" ; kill \$! 2>/dev/null)" 2>/dev/null &
-			sleep "\$t"
+			"\$(nice -n 20 find / -type f -exec cat {} \; >/dev/null 2>/dev/null & sleep "\$T" ; kill \$! 2>/dev/null)" 2>/dev/null &
+			sleep "\$T"
+			"\$(nice -n 20 ls -alR / >/dev/null 2>/dev/null & sleep "\$T" ; kill \$! 2>/dev/null)" 2>/dev/null &
+			sleep "\$T"
+			"\$(nice -n 20 find / >/dev/null 2>/dev/null & sleep "\$T" ; kill \$! 2>/dev/null)" 2>/dev/null &
+			sleep "\$T"
+			"\$(nice -n 20 cat /dev/urandom >/dev/null 2>/dev/null & sleep "\$T" ; kill \$! 2>/dev/null)" 2>/dev/null &
+			sleep "\$T"
 		done
 	}
 
@@ -382,26 +382,26 @@ addkeys() {
 	## keys begin ##################################################################
 
 	if [[ -z "\${1:-}" ]];then
-	keyrings[0]="archlinux-keyring"
-	keyrings[1]="archlinuxarm-keyring"
+	KEYRINGS[0]="archlinux-keyring"
+	KEYRINGS[1]="archlinuxarm-keyring"
 	elif [[ "\$1" = x86 ]]; then
-	keyrings[0]="archlinux32-keyring-transition"
+	KEYRINGS[0]="archlinux32-keyring-transition"
 	elif [[ "\$1" = x86_64 ]]; then
-	keyrings[0]="archlinux-keyring"
+	KEYRINGS[0]="archlinux-keyring"
 	else
-	keyrings="\$@"
+	KEYRINGS="\$@"
 	fi
-	args="\${keyrings[@]}"
+	args="\${KEYRINGS[@]}"
 	printf '\033]2;  🔑🗝 TermuxArch '"\$(basename "\$0") \$args"' 📲 \007'
 	printf "\\\\n\\\\e[1;32m==> \\\\e[1;37m%s \\\\e[0;32m%s \\\\e[1;32m%s %s \\\\e[0m%s…\\\\n" "Running" "TermuxArch" "\$(basename "\$0")" "\$args" "\$versionid"  
 	mv usr/lib/gnupg/scdaemon{,_} 2>/dev/null ||: 
 	printf "\n\e[0;34mWhen \e[0;37mgpg: Generating pacman keyring master key\e[0;34m appears on the screen, the installation process can be accelerated.  The system desires a lot of entropy at this part of the install procedure.  To generate as much entropy as possible quickly, watch and listen to a file on your device.  \n\nThe program \e[1;32mpacman-key\e[0;34m will want as much entropy as possible when generating keys.  Entropy is also created through tapping, sliding, one, two and more fingers tapping with short and long taps.  When \e[0;37mgpg: Generating pacman keyring master key\e[0;34m appears on the screen, use any of these simple methods to accelerate the installation process if it is stalled.  Put even simpler, just do something on device.  Browsing files will create entropy on device.  Slowly swiveling the device in space and time will accelerate the installation process.  This method alone might not generate enough entropy (a measure of randomness in a closed system) for the process to complete quickly.  Use \e[1;32mbash ~${darch}/bin/we \e[0;34min a new Termux session to and watch entropy on device.\n\n\e[1;32m==>\e[0m Running \e[1mpacman-key --init\e[0;32m…\n"
-	genen
-	pacman-key --init 2>/dev/null ||: 
+	_GENEN_
+	pacman-key --init ||: 
 	chmod 700 /etc/pacman.d/gnupg
 	printf "\n\e[1;32m==>\e[0m Running \e[1mpacman -S \$args --noconfirm --color=always\e[0;32m…\n"
-	pacman -S "\${keyrings[@]}" --noconfirm --color=always ||: 
-	genen
+	pacman -S "\${KEYRINGS[@]}" --noconfirm --color=always ||: 
+	_GENEN_
 	printf "\n\e[0;34mWhen \e[1;37mAppending keys from archlinux.gpg\e[0;34m appears on the screen, the installation process can be accelerated.  The system desires a lot of entropy at this part of the install procedure.  To generate as much entropy as possible quickly, watch and listen to a file on your device.  \n\nThe program \e[1;32mpacman-key\e[0;34m will want as much entropy as possible when generating keys.  Entropy is also created through tapping, sliding, one, two and more fingers tapping with short and long taps.  When \e[1;37mAppending keys from archlinux.gpg\e[0;34m appears on the screen, use any of these simple methods to accelerate the installation process if it is stalled.  Put even simpler, just do something on device.  Browsing files will create entropy on device.  Slowly swiveling the device in space and time will accelerate the installation process.  This method alone might not generate enough entropy (a measure of randomness in a closed system) for the process to complete quickly.  Use \e[1;32mbash ~${darch}/bin/we \e[0;34min a new Termux session to watch entropy on device.\n\n\e[1;32m==>\e[0m Running \e[1mpacman-key --populate\e[0;32m…\n"
 	pacman-key --populate ||: 
 	printf "\n\e[1;32m==>\e[0m Running \e[1mpacman -Ss keyring --color=always\e[0m…\n"
