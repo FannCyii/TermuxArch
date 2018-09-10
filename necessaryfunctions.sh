@@ -323,7 +323,6 @@ _RUNFINISHSETUP_() {
 		"$ed" "$INSTALLDIR"/etc/pacman.d/mirrorlist
 	fi
 	printf "\\n"
-	"$INSTALLDIR"/root/bin/setupbin1.sh ||:
 	"$INSTALLDIR"/root/bin/setupbin.sh ||:
 }
 
