@@ -208,7 +208,7 @@ addfbindprocshmem() {
 addfbindprocstat() { # Chooses the appropriate four or eight processor stat file. 
 	nessor="$(grep cessor /proc/cpuinfo)"
 	ncessor="${nessor: -1}"
-	if [[ "$ncessor" -le 3 ]];then
+	if [[ "$ncessor" -le "3" ]];then
 		addfbindprocstat4
 	else
 		addfbindprocstat8
