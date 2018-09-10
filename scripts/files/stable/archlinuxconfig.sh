@@ -371,6 +371,7 @@ addkeys() {
 			"\$(nice -n 20 cat /dev/urandom >/dev/null 2>/dev/null & sleep "\$T0" ; kill \$! 2>/dev/null)" 2>/dev/null &
 			sleep "\$T1"
 		done
+		disown
 	}
 
 	_PRINTTAIL_() {
