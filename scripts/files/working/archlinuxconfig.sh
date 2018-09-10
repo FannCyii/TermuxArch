@@ -208,7 +208,7 @@ addfbindprocshmem() {
 addfbindprocstat() { # Chooses the appropriate four or eight processor stat file. 
 	nessor="$(grep cessor /proc/cpuinfo)"
 	ncessor="${nessor: -1}"
-	if [[ "$ncessor" -le "3" ]] ; then
+	if [[ "$ncessor" -le "3" ]] 2>/dev/null ; then
 		addfbindprocstat4
 	else
 		addfbindprocstat8
@@ -362,8 +362,8 @@ addkeys() {
 		T0=256 # Maximum number of seconds loop shall run unless keys completes earlier.
 		T1=0.4
 		for I in "\$(seq 1 "\$N")"; do
-			"\$(nice -n 20 find / -type f -exec cat {} \; >/dev/null 2>/dev/null & sleep "\$T0" ; kill \$! 2>/dev/null)" 2>/dev/null &
-			sleep "\$T1"
+# 		# "\$(nice -n 20 find / -type f -exec cat {} \; >/dev/null 2>/dev/null & sleep "\$T0" ; kill \$! 2>/dev/null)" 2>/dev/null &
+# 		# sleep "\$T1"
 			"\$(nice -n 20 ls -alR / >/dev/null 2>/dev/null & sleep "\$T0" ; kill \$! 2>/dev/null)" 2>/dev/null &
 			sleep "\$T1"
 			"\$(nice -n 20 find / >/dev/null 2>/dev/null & sleep "\$T0" ; kill \$! 2>/dev/null)" 2>/dev/null &
