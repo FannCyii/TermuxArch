@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id379749248428"
+versionid="gen.v1.6.id204340624458"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -636,6 +636,7 @@ wgetifdm() {
 	fi
 }
 
+## END:INIT FUNCTIONS 
 ## User Information: 
 ## Configurable variables such as mirrors and download manager options are in `setupTermuxArchConfigs.sh`.  Working with `kownconfigurations.sh` in the working directory is simple.  `bash setupTermuxArch.sh manual` shall create `setupTermuxArchConfigs.sh` in the working directory for editing; See `setupTermuxArch.sh help` for more information.  
 declare -a ADM=(aria2 axel curl lftp wget)
@@ -781,7 +782,7 @@ elif [[ "${1//-}" = [Dd]* ]] || [[ "${1//-}" = [Ss]* ]] ; then
 elif [[ "${1//-}" = [Hh][Ee]* ]] || [[ "${1//-}" = [?]* ]] ; then
 	_ARG2DIR_ "$@" 
 	_PRINTUSAGE_ "$@"  
-## [h|?]  Display verbose builtin help.
+## [h]  Display verbose builtin help.
 elif [[ "${1//-}" = [Hh]* ]] ; then
 	lcc="1"
 	_ARG2DIR_ "$@" 

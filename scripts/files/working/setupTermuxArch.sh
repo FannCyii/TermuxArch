@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id0178"
+versionid="gen.v1.6.id204340624458"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -782,7 +782,7 @@ elif [[ "${1//-}" = [Dd]* ]] || [[ "${1//-}" = [Ss]* ]] ; then
 elif [[ "${1//-}" = [Hh][Ee]* ]] || [[ "${1//-}" = [?]* ]] ; then
 	_ARG2DIR_ "$@" 
 	_PRINTUSAGE_ "$@"  
-## [h|?]  Display verbose builtin help.
+## [h]  Display verbose builtin help.
 elif [[ "${1//-}" = [Hh]* ]] ; then
 	lcc="1"
 	_ARG2DIR_ "$@" 

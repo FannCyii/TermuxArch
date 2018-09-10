@@ -60,7 +60,8 @@ addbash_profile() {
 	fi
 	PATH="\$HOME/bin:\$PATH"
 	. "\$HOME"/.bashrc
-	PS1="\e[38;5;148m\]\u\[\e[1;0m\]\A\[\e[1;38;5;112m\]\W\[\e[0m\]\$ "
+	PS1="[\e[38;5;148m\]\u\[\e[1;0m\]\A\[\e[1;38;5;112m\]\W\[\e[0m\]]\\$ "
+	# PS1="[\A\[\033[0;32m\] \W \[\033[0m\]]\\$ "
 	export TZ="$(getprop persist.sys.timezone)"
 	EOM
 	for i in "${!LC_TYPE[@]}"; do
@@ -501,8 +502,8 @@ addprofile() {
 }
 
 addresolvconf() {
-	rm etc/resolv* 2>/dev/null||:
-	cat > etc/resolv.conf <<- EOM
+	mkdir -p run/systemd/resolve 	
+	cat > run/systemd/resolve/resolv.conf <<- EOM
 	nameserver 8.8.8.8
 	nameserver 8.8.4.4
 	EOM
