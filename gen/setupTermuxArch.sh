@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id864260681346"
+versionid="gen.v1.6.id321013192459"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -568,7 +568,7 @@ _STANDARDIF_() {
 	fi
 }
 
-_TRPERROR_() { # Run on script error.
+_STRPERROR_() { # Run on script error.
 	local RV="$?"
 	printf "\\e[?25h\\n\\e[1;48;5;138m %s\\e[0m\\n" "TermuxArch WARNING:  Generated script signal ${RV:-unknown} near or at line number ${1:-unknown} by \`${2:-command}\`!"
 	if [[ "$RV" = 4 ]] ; then
@@ -578,7 +578,7 @@ _TRPERROR_() { # Run on script error.
 	exit 201
 }
 
-_TRPEXIT_() { # Run on exit.
+_STRPEXIT_() { # Run on exit.
 	local RV="$?"
 	rm -rf "$TAMPDIR"
 	sleep 0.04
@@ -609,13 +609,13 @@ _TRPEXIT_() { # Run on exit.
 	exit
 }
 
-_TRPSIGNAL_() { # Run on signal.
+_STRPSIGNAL_() { # Run on signal.
 	printf "\\e[?25h\\e[1;7;38;5;0mTermuxArch WARNING:  Signal $? received!\\e[0m\\n"
 	rm -rf "$TAMPDIR"
  	exit 211 
 }
 
-_TRPQUIT_() { # Run on quit.
+_STRPQUIT_() { # Run on quit.
 	printf "\\e[?25h\\e[1;7;38;5;0mTermuxArch WARNING:  Quit signal $? received!\\e[0m\\n"
 	rm -rf "$TAMPDIR"
  	exit 221 
@@ -666,10 +666,10 @@ declare wdir="$PWD/"
 declare STI=""		## Generates pseudo random number.
 declare STIME=""	## Generates pseudo random number.
 declare tm=""		## tar manager
-trap "_TRPERROR_ $LINENO $BASH_COMMAND $?" ERR 
-trap _TRPEXIT_ EXIT
-trap _TRPSIGNAL_ HUP INT TERM 
-trap _TRPQUIT_ QUIT 
+trap "_STRPERROR_ $LINENO $BASH_COMMAND $?" ERR 
+trap _STRPEXIT_ EXIT
+trap _STRPSIGNAL_ HUP INT TERM 
+trap _STRPQUIT_ QUIT 
 if [[ -z "${TAMPDIR:-}" ]] ; then
 	TAMPDIR=""
 fi
