@@ -254,7 +254,7 @@ addfbindprocstat8() {
 }
 
 addfbindexample() {
-	_CFLHDRS_ var/binds/fbindexample.prs "# To regenerate the start script use \`setupTermuxArch.sh re[fresh[\`.  Add as many proot statements as you want; The init script will parse this file at refresh.  An example is included for convenience.  Usage: PROOTSTMNT+=\"-b host_path:guest_path \" The space before the last double quote is necessary." 
+	_CFLHDRS_ var/binds/fbindexample.prs "# To regenerate the start script use \`setupTermuxArch.sh re[fresh[\`.  Add as many proot statements as you want; The init script will parse this file at refresh.  Examples are included for convenience.  Usage: PROOTSTMNT+=\"-b host_path:guest_path \" The space before the last double quote is necessary." 
 	cat >> var/binds/fbindexample.prs <<- EOM
 	# PROOTSTMNT+="-b $INSTALLDIR/var/binds/fbindprocstat:/proc/stat " 
 	# if [[ ! -r /dev/shm ]] ; then 
@@ -264,11 +264,7 @@ addfbindexample() {
 }
 
 addbinds() { # Checks if /proc/stat is usable. 
-	if [[ -f /proc/stat ]] ; then
-		if [[ ! "$(head /proc/stat 2>/dev/null)" ]] ; then
-			addfbindprocstat
-		fi
-	else
+	if [[ ! -r /proc/stat ]] ; then
 		addfbindprocstat
 	fi
 }

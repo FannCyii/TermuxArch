@@ -71,11 +71,13 @@ if [[ "$KOE" ]] ; then
 	PROOTSTMNT+="--kill-on-exit "
 fi
 PROOTSTMNT+="--link2symlink -0 -r $INSTALLDIR "
-if [[ -f /proc/stat ]] ; then
-	if [[ ! "$(head /proc/stat)" ]] ; then
-		PROOTSTMNT+="-b $INSTALLDIR/var/binds/fbindprocstat:/proc/stat " 
-	fi
-else
+if [[ ! -r /proc/ashmem ]] ; then
+	PROOTSTMNT+="-b $INSTALLDIR/tmp:/proc/ashmem " 
+fi
+if [[ ! -r /proc/shm ]] ; then
+	PROOTSTMNT+="-b $INSTALLDIR/tmp:/proc/shm " 
+fi
+if [[ ! -r /proc/stat ]] ; then
 	PROOTSTMNT+="-b $INSTALLDIR/var/binds/fbindprocstat:/proc/stat " 
 fi
 if [[ -n "$(ls -A "$INSTALLDIR"/var/binds/*.prs)" ]] ; then
