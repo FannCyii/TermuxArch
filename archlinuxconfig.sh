@@ -596,8 +596,8 @@ addtrim() {
 	rm -rf /usr/lib/modules
 	echo [4/5] pacman -Sc --noconfirm --color=always
 	pacman -Sc --noconfirm --color=always
-	echo [5/5] rm /var/cache/pacman/pkg/*xz
-	rm /var/cache/pacman/pkg/*xz ||: 
+	echo [5/5] rm -f /var/cache/pacman/pkg/*xz
+	rm -f /var/cache/pacman/pkg/*xz ||: 
 	printf "\\\\n\\\\e[1;32mtrim: Done \\\\e[0m\\\\n\\\\n" 
 	EOM
 	chmod 700 root/bin/trim 
