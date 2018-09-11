@@ -6,8 +6,6 @@
 # _STANDARD_="function name" && STANDARD="variable name" are under construction.
 ################################################################################
 
-declare FSTND=""
-
 _FTCHIT_() {
 	_GETMSG_
  	_PRINT_DOWNLOADING_FTCHIT_ 
