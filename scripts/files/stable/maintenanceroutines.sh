@@ -182,6 +182,7 @@ refreshsys() { # Refreshes
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
 	_PRINTFOOTER2_
+	exit
 }
 
 _SPACEINFO_() {
