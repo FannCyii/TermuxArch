@@ -1,24 +1,23 @@
 #!/bin/env bash
 # Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 🌏 🌐 🗺
-# Hosting https://sdrausty.github.io/TermuxArch courtesy https://pages.github.com
+# Hosted sdrausty.github.io/TermuxArch courtesy https://pages.github.com
+# https://sdrausty.github.io/TermuxArch/README has info about this project. 
 # https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help.  
-# https://sdrausty.github.io/TermuxArch/README has information about this project. 
+# _STANDARD_="function name" && STANDARD="variable name" are under construction.
 ################################################################################
 
-sysinfo() {
-	spaceinfo
+_SYSINFO_() {
+	_SPACEINFO_
 	printf "\\n\\e[1;32mGenerating TermuxArch system information; Please wait…\\n\\n" 
-	systeminfo ## & spinner "Generating" "System Information…" 
+	_SYSTEMINFO_ ## & spinner "Generating" "System Information…" 
 	printf "\\e[38;5;76m"
 	cat "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\n\\e[1mThis information may be quite important when planning issue(s) at https://github.com/sdrausty/TermuxArch/issues with the hope of improving \`setupTermuxArch.sh\`;  Include input and output, along with screenshot(s) relavent to X, and similar.\\n\\n"
 	exit
 }
 
-systeminfo () {
+_SYSTEMINFO_ () {
 	printf "Begin TermuxArch system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
- 	printf "\\n\`termux-info\` results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
- 	termux-info >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\ndpkg --print-architecture result:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	dpkg --print-architecture >> "${wdir}setupTermuxArchSysInfo$STIME".log
  	printf "\\ngetprop results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
@@ -94,37 +93,34 @@ copyimage() { # A systemimage.tar.gz file can be used: `setupTermuxArch.sh ./[pa
 }
 
 loadimage() { 
-	namestartarch 
- 	spaceinfo
+	_NAMESTARTARCH_ 
+ 	_SPACEINFO_
 	printf "\\n" 
-	wakelock
-	_PREPINSTALLDIR 
+	_WAKELOCK_
+	_PREPINSTALLDIR_ 
   	copyimage ## "$@" & spinner "Copying" "…" 
-	printmd5check
-	md5check
-	printcu 
+	_PRINTMD5CHECK_
+	_MD5CHECK_
+	_PRINTCU_ 
 	rm -f "$INSTALLDIR"/*.tar.gz "$INSTALLDIR"/*.tar.gz.md5
-	printdone 
-	printconfigup 
-	touchupsys 
+	_PRINTDONE_ 
+	_PRINTCONFIGUP_ 
+	_TOUCHUPSYS_ 
 	printf "\\n" 
-	wakeunlock 
-	printfooter
-	"$INSTALLDIR/$startbin" ||:
-# 	"$startbin" help
-	printstartbinusage
-	printfooter2
+	_WAKEUNLOCK_ 
+	_PRINTFOOTER_
+	set +Eeuo pipefail
+	"$INSTALLDIR/$STARTBIN" ||:
+	set -Eeuo pipefail
+	_PRINTSTARTBIN_USAGE_
+	_PRINTFOOTER2_
+	exit
 }
-
-# 	namestartarch 
-# 	spaceinfo
-# 	_PREPINSTALLDIR
-# 	detectsystem 
 
 refreshsys() { # Refreshes
 	printf '\033]2; setupTermuxArch.sh refresh 📲 \007'
- 	namestartarch  
- 	spaceinfo
+ 	_NAMESTARTARCH_  
+ 	_SPACEINFO_
 	cd "$INSTALLDIR"
 	_SETLANGUAGE_
 	addREADME
@@ -160,45 +156,47 @@ refreshsys() { # Refreshes
 	addyt 
 	addwe  
 	addv 
-	makefinishsetup
-	makesetupbin 
-	makestartbin 
+	_MAKEFINISHSETUP_
+	_MAKESETUPBIN_ 
+	_MAKESTARTBIN_ 
 	_SETLOCALE_
 	printf "\\n" 
-	wakelock
+	_WAKELOCK_
 	printf '\033]2; setupTermuxArch.sh refresh 📲 \007'
 	printf "\\n\\e[1;32m==> \\e[1;37m%s \\e[1;32m%s %s 📲 \\a\\n" "Running" "$(basename "$0")" "$args" 
 	"$INSTALLDIR"/root/bin/setupbin.sh ||: 
  	rm -f root/bin/finishsetup.sh
  	rm -f root/bin/setupbin.sh 
 	printf "\\e[1;34mThe following files have been updated to the newest version.\\n\\n\\e[0;32m"
-	ls "$INSTALLDIR/$startbin" |cut -f7- -d /
+	ls "$INSTALLDIR/$STARTBIN" |cut -f7- -d /
 	ls "$INSTALLDIR"/bin/we |cut -f7- -d /
 	ls "$INSTALLDIR"/root/bin/* |cut -f7- -d /
 	printf "\\n" 
-	wakeunlock 
-	printfooter 
+	_WAKEUNLOCK_ 
+	_PRINTFOOTER_ 
 	printf "\\a"
 	sleep 0.015
 	printf "\\a"
-	"$INSTALLDIR/$startbin" ||:
-	printstartbinusage
-	printfooter2
+	set +Eeuo pipefail
+	"$INSTALLDIR/$STARTBIN" ||:
+	set -Eeuo pipefail
+	_PRINTSTARTBIN_USAGE_
+	_PRINTFOOTER2_
 }
 
-spaceinfo() {
+_SPACEINFO_() {
 	declare spaceMessage=""
 	units="$(df "$INSTALLDIR" 2>/dev/null | awk 'FNR == 1 {print $2}')" 
 	if [[ "$units" = Size ]] ; then
-		spaceinfogsize 
+		_SPACEINFOGSIZE_ 
 		printf "$spaceMessage"
 	elif [[ "$units" = 1K-blocks ]] ; then
-		spaceinfoksize 
+		_SPACEINFOKSIZE_ 
 		printf "$spaceMessage"
 	fi
 }
 
-spaceinfogsize() {
+_SPACEINFOGSIZE_() {
 	userspace 
 	if [[ "$CPUABI" = "$CPUABIX86" ]] || [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
 		if [[ "$usrspace" = *G ]] ; then 
@@ -231,9 +229,9 @@ spaceinfogsize() {
 	fi
 }
 
-spaceinfoq() {
+_SPACEINFOQ_() {
 	if [[ "$suanswer" != [Yy]* ]] ; then
-		spaceinfo
+		_SPACEINFO_
 		if [[ -n "$spaceMessage" ]] ; then
 			while true; do
 				printf "\\n\\e[1;30m"
@@ -253,7 +251,7 @@ spaceinfoq() {
 	fi
 }
 
-spaceinfoksize() {
+_SPACEINFOKSIZE_() {
 	userspace 
 	if [[ "$CPUABI" = "$CPUABI8" ]] ; then
 		if [[ "$usrspace" -lt "1500000" ]] ; then
