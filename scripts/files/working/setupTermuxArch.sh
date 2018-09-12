@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id3465"
+versionid="gen.v1.6.id179030458150"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -702,7 +702,7 @@ if [[ "$commandif" = "" ]] ; then
 	exit
 fi
 ## Generates pseudo random number to create uniq strings.
-if [[ -f  /proc/sys/kernel/random/uuid ]] ; then
+if [[ -r  /proc/sys/kernel/random/uuid ]] ; then
 	STI="$(cat /proc/sys/kernel/random/uuid)"
 	STIM="${STI//-}"	
 	STIME="${STIM:0:3}"	

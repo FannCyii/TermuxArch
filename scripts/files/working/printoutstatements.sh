@@ -1,5 +1,5 @@
 #!/bin/env bash
-# Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 🌏 🌐 🗺
+# Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 🌏 🌐 🗺  
 # Hosted sdrausty.github.io/TermuxArch courtesy https://pages.github.com
 # https://sdrausty.github.io/TermuxArch/README has info about this project. 
 # https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help.  
@@ -7,16 +7,17 @@
 # Printout statement subroutines for `setupTermuxArch.sh`.
 ################################################################################
 FLHDR0[0]="#!/bin/env bash"
-FLHDR0[1]="# Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 🌏 🌐 🗺"
+FLHDR0[1]="# Copyright 2017-2018 by SDRausty. All rights reserved.   🌎 🌍 🌏 🌐 🗺 " 
 FLHDR0[2]="# Hosting sdrausty.github.io/TermuxArch courtesy https://pages.github.com." 
 FLHDR0[3]="# https://sdrausty.github.io/TermuxArch/README has info about this project."
 FLHDR0[4]="# https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help." 
 FLHDR1[0]="################################################################################"
-FLHDR1[1]="IFS=$'\\n\\t'"
+FLHDR1[1]=""
+# FLHDR1[1]="IFS=$'\\n\\t'"
 FLHDR1[2]="set -Eeuo pipefail"
 FLHDR1[3]="shopt -s nullglob globstar"
 FLHDR1[4]="unset LD_PRELOAD"
-FLHDR1[5]="versionid=v1.6.id3465"
+FLHDR1[5]="versionid=gen.v1.6.id179030458150"
 FLHDR1[6]=" "
 FLHDRP[0]="## BEGIN #######################################################################"
 FLHDRP[1]="LD_PRELOAD=\"env /data/data/com.termux/files/usr/lib/libandroid-shmem.so\""
@@ -31,11 +32,11 @@ TRPEXIT[1]="	local RV=\"\$?\" "
 TRPEXIT[2]="  	printf \"\\a\\a\\a\\a\" "
 TRPEXIT[3]="	sleep 0.4 "
 TRPEXIT[4]="	if [[ \"\$RV\" = 0 ]] ; then"
-TRPEXIT[5]="		printf \"\\a\\e[0;32m%s %s \\a\\e[0m\$versionid\\e[1;34m: \\a\\e[1;32m%s\\e[0m\\n\\n\\a\\e[0m\" \"\${0##*/}\" \"\$@\" \"DONE  � \""
-TRPEXIT[6]="		printf \"\\e]2; %s: %s \007\" \"\${0##*/} \$@\" \"DONE � \""
+TRPEXIT[5]="		printf \"\\a\\e[0;32m%s %s \\a\\e[0m\$versionid\\e[1;34m: \\a\\e[1;32m%s\\e[0m\\n\\n\\a\\e[0m\" \"\${0##*/}\" \"\$@\" \"DONE 🏁 "
+TRPEXIT[6]="		printf \"\\e]2; %s: %s \007\" \"\${0##*/} \$@\" \"DONE 🏁 "
 TRPEXIT[7]="	else "
-TRPEXIT[8]="		printf \"\\a\\e[0;32m%s %s \\a\\e[0m\$versionid\\e[1;34m: \\a\\e[1;32m%s %s\\e[0m\\n\\n\\a\\e[0m\" \"\${0##*/}\" \"\$@\" \"(Exit Signal \$RV)\" \"DONE � \""
-TRPEXIT[9]="		printf \"\033]2; %s: %s %s \007\" \"\${0##*/} \$@\" \"(Exit Signal \$RV)\" \"DONE � \""
+TRPEXIT[8]="		printf \"\\a\\e[0;32m%s %s \\a\\e[0m\$versionid\\e[1;34m: \\a\\e[1;32m%s %s\\e[0m\\n\\n\\a\\e[0m\" \"\${0##*/}\" \"\$@\" \"(Exit Signal \$RV)\" \"DONE 🏁 "
+TRPEXIT[9]="		printf \"\033]2; %s: %s %s \007\" \"\${0##*/} \$@\" \"(Exit Signal \$RV)\" \"DONE 🏁 "
 TRPEXIT[10]="	fi"
 TRPEXIT[11]="	printf \"\\e[?25h\\e[0m\""
 TRPEXIT[12]="	set +Eeuo pipefail"
