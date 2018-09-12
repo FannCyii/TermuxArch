@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id468031294569"
+versionid="gen.v1.6.id207813447844"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -844,7 +844,7 @@ elif [[ "${1//-}" = [Oo]* ]] ; then
 	_PRINTUSAGE_
 	_OPT2_ "$@" 
 ## [p[urge] [customdir]|u[ninstall] [customdir]]  Remove Arch Linux.
-elif [[ "${1//-}" = [Pp]* ]] || [[ "${1//-}" = [Uu]* ]] ; then
+elif [[ "${1//-}" = [Pp]* ]] ; then
 	echo 
 	echo Setting mode to purge.
 	_ARG2DIR_ "$@" 
