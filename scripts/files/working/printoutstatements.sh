@@ -7,7 +7,7 @@
 # Printout statement subroutines for `setupTermuxArch.sh`.
 ################################################################################
 FLHDR0[0]="#!/bin/env bash"
-FLHDR0[1]="# Copyright 2017-2018 by SDRausty. All rights reserved.   🌎 🌍 🌏 🌐 🗺 " 
+FLHDR0[1]="# Copyright 2017-2018 by SDRausty. All rights reserved.  🌎 🌍 🌏 🌐 🗺 " 
 FLHDR0[2]="# Hosting sdrausty.github.io/TermuxArch courtesy https://pages.github.com." 
 FLHDR0[3]="# https://sdrausty.github.io/TermuxArch/README has info about this project."
 FLHDR0[4]="# https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help." 
@@ -17,7 +17,7 @@ FLHDR1[1]=""
 FLHDR1[2]="set -Eeuo pipefail"
 FLHDR1[3]="shopt -s nullglob globstar"
 FLHDR1[4]="unset LD_PRELOAD"
-FLHDR1[5]="versionid=gen.v1.6.id179030458150"
+FLHDR1[5]="versionid=gen.v1.6.id121040442099"
 FLHDR1[6]=" "
 FLHDRP[0]="## BEGIN #######################################################################"
 FLHDRP[1]="LD_PRELOAD=\"env /data/data/com.termux/files/usr/lib/libandroid-shmem.so\""
