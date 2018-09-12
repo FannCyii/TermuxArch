@@ -96,7 +96,7 @@ _MAINBLOCK_() {
 	_DETECTSYSTEM_ 
 	_WAKEUNLOCK_ 
 	_PRINTFOOTER_
-	set -Eeuo pipefail
+	set +Eeuo pipefail
 	"$INSTALLDIR/$STARTBIN" ||:
 	set -Eeuo pipefail
 	_PRINTSTARTBIN_USAGE_
