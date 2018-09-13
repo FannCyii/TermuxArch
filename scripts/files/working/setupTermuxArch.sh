@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id680034548416"
+versionid="gen.v1.6.id287007745087"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -144,8 +144,9 @@ _DEPENDDM_() {
 # 	# ADM[pkg]=cmd # Ordinary assignment adds another single element to the array.
 	for cmd in "${!ADM[@]}"; do # Enumerates download manager commands from all the available Termux https capable download manager packages.  
 		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
-			PDM=([${ADM[$cmd]}]=$cmd) # Create associative array if cmd is present. 
+# 			PDM=([${ADM[$cmd]}]=$cmd) # Create reverse associative array if cmd is present. 
 #		#	PDM[${ADM[$cmd]}]=$cmd # Builds associative array if cmds are present. 
+			PDM[$cmd]="${ADM[$cmd]}" # Create associative array if cmd is present. 
 		fi
 	done
 	if [[ -z "${PDM[@]:-}" ]] ; then
