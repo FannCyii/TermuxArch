@@ -15,7 +15,7 @@ _FTCHIT_() {
 		axel http://"$CMIRROR$path$file".md5 
 		axel http://"$CMIRROR$path$file"
 	elif [[ "$dm" = lftp ]] ; then
-		lftpget http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
+		lftpget -c http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget "$DMVERBOSE" -c --show-progress -N http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file" 
 	else
@@ -39,7 +39,7 @@ _FTCHSTND_() {
 	elif [[ "$dm" = lftp ]] ; then
 		lftpget "$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
 		_FMIRROR_
-		lftpget http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
+		lftpget -c http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget -v -O/dev/null "$CMIRROR" 2>"$TAMPDIR/global2localmirror"
 		_FMIRROR_
@@ -72,7 +72,7 @@ _GETIMAGE_() {
 	elif [[ "$dm" = lftp ]] ; then
 		lftpget http://"$CMIRROR$path"md5sums.txt
 		_ISX86_
-		lftpget http://"$CMIRROR$path$file"
+		lftpget -c http://"$CMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget "$DMVERBOSE" -N --show-progress http://"$CMIRROR$path"md5sums.txt
 		_ISX86_
