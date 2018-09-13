@@ -7,7 +7,6 @@
 ################################################################################
 
 _FTCHIT_() {
-	_GETMSG_
  	_PRINT_DOWNLOADING_FTCHIT_ 
 	if [[ "$dm" = aria2c ]];then
 		aria2c -c -Z http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
@@ -25,7 +24,6 @@ _FTCHIT_() {
 
 _FTCHSTND_() {
 	FSTND=1
-	_GETMSG_
 	_PRINTCONTACTING_ 
 	if [[ "$dm" = aria2c ]];then
 		aria2c "$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
@@ -60,7 +58,6 @@ _FMIRROR_() {
 
 _GETIMAGE_() {
 	_PRINTDOWNLOADINGX86_ 
-	_GETMSG_
 	if [[ "$dm" = aria2c ]];then
 		aria2c http://"$CMIRROR$path$file".md5 
 		_ISX86_
