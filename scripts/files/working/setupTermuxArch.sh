@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id4132"
+versionid="gen.v1.6.id509545970209"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -229,17 +229,14 @@ dependsblock() {
 
 dwnl() {
 	if [[ "$dm" = aria2c ]] ; then
-		aria2c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		aria2c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = axel ]] ; then
 		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
 		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = lftp ]] ; then
-		lftpget -v https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		lftpget -v https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		lftpget https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = wget ]] ; then
-		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	else
 		curl "$DMVERBOSE" -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz
 	fi

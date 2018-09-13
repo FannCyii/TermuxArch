@@ -10,8 +10,7 @@ _FTCHIT_() {
 	_GETMSG_
  	_PRINT_DOWNLOADING_FTCHIT_ 
 	if [[ "$dm" = aria2c ]];then
-		aria2c http://"$CMIRROR$path$file".md5 
-		aria2c -c http://"$CMIRROR$path$file"
+		aria2c -c -Z http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
 	elif [[ "$dm" = axel ]];then
 		axel http://"$CMIRROR$path$file".md5 
 		axel http://"$CMIRROR$path$file"
@@ -32,8 +31,7 @@ _FTCHSTND_() {
 		NLCMIRROR="$(grep Redir "$TAMPDIR/global2localmirror" | awk {'print $8'})" 
 		_PRINTDONE_ 
 		_PRINTDOWNLOADINGFTCH_ 
-		aria2c http://"$NLCMIRROR$path$file".md5 
-		aria2c -c -m 4 http://"$NLCMIRROR$path$file"
+		aria2c -c -m 4 -Z http://"$NLCMIRROR$path$file".md5 http://"$NLCMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget -v -O/dev/null "$CMIRROR" 2>"$TAMPDIR/global2localmirror"
 		NLCMIRROR="$(grep Location "$TAMPDIR/global2localmirror" | awk {'print $2'})" 
