@@ -46,9 +46,10 @@ _FTCHSTND_() {
 		lftpget -c "$NLCMIRROR$path$file".md5 "$NLCMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget -v -O/dev/null "$CMIRROR" 2>"$TAMPDIR/global2localmirror"
-		_FMIRROR_
-		wget "$DMVERBOSE" -N --show-progress "$NLCMIRROR$path$file".md5 
-		wget "$DMVERBOSE" -c --show-progress "$NLCMIRROR$path$file" 
+		NLCMIRROR="$(grep Location "$TAMPDIR/global2localmirror" | awk {'print $2'})" 
+		_PRINTDONE_ 
+		_PRINTDOWNLOADINGFTCH_ 
+		wget "$DMVERBOSE" -c --show-progress "$NLCMIRROR$path$file".md5 "$NLCMIRROR$path$file" 
 	else
 		curl -v "$CMIRROR" 2>"$TAMPDIR/global2localmirror"
 		_FMIRROR_
