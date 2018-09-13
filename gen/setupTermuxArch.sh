@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id243633734591"
+versionid="gen.v1.6.id909826154591"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -140,28 +140,18 @@ dependbp() {
 }
 
 _DEPENDDM_() {
-	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
-# 	# ADM[pkg]=cmd # Ordinary assignment adds another single element to the array.
-	for cmd in "${!ADM[@]}"; do # Enumerates download manager commands from all the available Termux https capable download manager packages.  
+	ADM=([aria2c]=aria2 [axel]=axel [curl]=curl [lftpget]=lftp [wget]=wget)
+	for cmd in "${!ADM[@]}" ; do
 		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
-# 			PDM=([${ADM[$cmd]}]=$cmd) # Create reverse associative array if cmd is present. 
-#		#	PDM[${ADM[$cmd]}]=$cmd # Builds associative array if cmds are present. 
-			PDM[$cmd]="${ADM[$cmd]}" # Create associative array if cmd is present. 
+	  		dm="$cmd"
+			echo "HTTPS capable download manager \`$dm\` found: Continuing…"
 			break
 		fi
 	done
 	if [[ -z "${PDM[@]:-}" ]] ; then
 		echo
 		echo "Found no HTTPS capable download managers present on device: Continuing…"
-# 		PDM=([wget]=wget) # Create associative array if cmd is not present. 
-	else
-  		dm="${!PDM[@]}"	# Sets download manager.
-		echo
-		echo "HTTPS capable download manager \`$dm\` found: Continuing…"
 	fi
-#	# read -p "Press enter to continue" # https://unix.stackexchange.com/questions/293940/bash-how-can-i-make-press-any-key-to-continue
-# 	# read -n 1 -s -r -p "Press any key to continue" # https://unix.stackexchange.com/questions/293940/bash-how-can-i-make-press-any-key-to-continue
-# 	# exit
 }
 
 depends() { # Checks for missing commands.  
