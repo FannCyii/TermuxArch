@@ -37,9 +37,6 @@ _FTCHSTND_() {
 		NLCMIRROR="${NLCMIRR::-3}"
 		_PRINTDONE_ 
 		_PRINTDOWNLOADINGFTCH_ 
-		echo "NLCMIRROR"
-		echo "$NLCMIRROR"
-		exit
 		axel http://"$NLCMIRROR$path$file".md5 
 		axel http://"$NLCMIRROR$path$file"
 	elif [[ "$dm" = lftp ]] ; then
