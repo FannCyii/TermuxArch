@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id247844644030"
+versionid="gen.v1.6.id749956694619"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -107,7 +107,7 @@ chkself() {
 		if [[ "$(<setupTermuxArch.sh)" != "$(<setupTermuxArch.tmp)" ]] ; then
 			cp setupTermuxArch.sh "${wdir}setupTermuxArch.sh"
 			printf "\\e[0;32m%s\\e[1;34m: \\e[1;32mUPDATED\\n\\e[1;32mRESTARTED\\e[1;34m: \\e[0;32m%s %s \\n\\n\\e[0m"  "${0##*/}" "${0##*/}" "$args"
-			exit 231
+# 			exit 231
  			.  "${wdir}setupTermuxArch.sh" "$@"
 		fi
 	fi
