@@ -37,8 +37,8 @@ _FTCHSTND_() {
 		NLCMIRROR="${NLCMIRR::-3}"
 		_PRINTDONE_ 
 		_PRINTDOWNLOADINGFTCH_ 
-		axel http://"$NLCMIRROR$path$file".md5 
-		axel http://"$NLCMIRROR$path$file"
+		axel -a http://"$NLCMIRROR$path$file".md5 
+		axel -a http://"$NLCMIRROR$path$file"
 	elif [[ "$dm" = lftp ]] ; then
 		lftp -e get http://"$CMIRROR" 2>&1 | tee>"$TAMPDIR/global2localmirror"
 		NLCMI="$(grep direct "$TAMPDIR/global2localmirror" | awk {'print $5'})" 
