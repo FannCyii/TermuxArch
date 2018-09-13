@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id4132"
+versionid="v1.6.id1410"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -140,12 +140,13 @@ dependbp() {
 }
 
 _DEPENDDM_() {
-	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftp [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
 # 	# ADM[pkg]=cmd # Ordinary assignment adds another single element to the array.
 	for cmd in "${!ADM[@]}"; do # Enumerates download manager commands from all the available Termux https capable download manager packages.  
 		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
-			PDM=([${ADM[$cmd]}]=$cmd) # Create associative array if cmd is present. 
+# 			PDM=([${ADM[$cmd]}]=$cmd) # Create reverse associative array if cmd is present. 
 #		#	PDM[${ADM[$cmd]}]=$cmd # Builds associative array if cmds are present. 
+			PDM[$cmd]="${ADM[$cmd]}" # Create associative array if cmd is present. 
 		fi
 	done
 	if [[ -z "${PDM[@]:-}" ]] ; then
@@ -229,17 +230,14 @@ dependsblock() {
 
 dwnl() {
 	if [[ "$dm" = aria2c ]] ; then
-		aria2c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		aria2c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = axel ]] ; then
 		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
 		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = lftp ]] ; then
-		lftpget -v https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		lftpget -v https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		lftpget -c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = wget ]] ; then
-		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	else
 		curl "$DMVERBOSE" -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz
 	fi
