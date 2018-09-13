@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id703121096422"
+versionid="gen.v1.6.id143437865612"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -231,7 +231,8 @@ dwnl() {
 	if [[ "$dm" = aria2c ]] ; then
 		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = axel ]] ; then
-		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
+		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = lftp ]] ; then
 		lftpget https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = wget ]] ; then
