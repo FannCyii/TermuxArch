@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id1410"
+versionid="v1.6.id0085"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -602,7 +602,7 @@ _STRPERROR_() { # Run on script error.
 
 _STRPEXIT_() { # Run on exit.
 	local RV="$?"
-	rm -rf "$TAMPDIR"
+# 	rm -rf "$TAMPDIR"
 	sleep 0.04
 # 	CDIRS=( bin boot dev etc home lib mnt opt proc root run sbin srv sys tmp usr var )
 # 	CDIRSV="0"

@@ -26,18 +26,24 @@ _FTCHSTND_() {
 	FSTND=1
 	_PRINTCONTACTING_ 
 	if [[ "$dm" = aria2c ]];then
-		aria2c "$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
-		_FMIRROR_
-		aria2c -c -m 4 -Z http://"$NLCMIRROR$path$file".md5 http://"$NLCMIRROR$path$file"
+		aria2c http://"$CMIRROR" 1>"$TAMPDIR/global2localmirror"
+		NLCMIRROR="$(grep Redirecting "$TAMPDIR/global2localmirror" | awk {'print $8'})" 
+		_PRINTDONE_ 
+		_PRINTDOWNLOADINGFTCH_ 
+		aria2c -c -m 4 -Z "$NLCMIRROR$path$file".md5 "$NLCMIRROR$path$file"
 	elif [[ "$dm" = axel ]];then
-		axel "$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
+		axel http://"$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
 		_FMIRROR_
-		axel http://"$CMIRROR$path$file".md5 
-		axel http://"$CMIRROR$path$file"
+		axel http://"$NLCMIRROR$path$file".md5 
+		axel http://"$NLCMIRROR$path$file"
 	elif [[ "$dm" = lftp ]] ; then
-		lftpget "$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
-		_FMIRROR_
-		lftpget -c http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
+		lftp -e get http://"$CMIRROR" 2>&1 | tee>"$TAMPDIR/global2localmirror"
+		NLCMI="$(grep direct "$TAMPDIR/global2localmirror" | awk {'print $5'})" 
+		NLCMIRR="${NLCMI//\`}"
+		NLCMIRROR="${NLCMIRR//\'}"
+		_PRINTDONE_ 
+		_PRINTDOWNLOADINGFTCH_ 
+		lftpget -c "$NLCMIRROR$path$file".md5 "$NLCMIRROR$path$file"
 	elif [[ "$dm" = wget ]];then 
 		wget -v -O/dev/null "$CMIRROR" 2>"$TAMPDIR/global2localmirror"
 		_FMIRROR_
@@ -81,7 +87,7 @@ _GETIMAGE_() {
 	fi
 }
 
-_GETMSG_() {
+_GETMSG_() { # Depreciated
  	if [[ "$dm" = axel ]] || [[ "$dm" = lftp ]];then
  		printf "\\n\\e[1;32m%s\\n\\n""The chosen download manager \`$dm\` is being implemented: curl (command line tool and library for transferring data with URLs) alternative https://github.com/curl/curl chosen:  DONE"
 	fi

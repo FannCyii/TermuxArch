@@ -6,8 +6,6 @@
 # _STANDARD_="function name" && STANDARD="variable name" are under construction.
 ################################################################################
 # `setupTermuxArch.sh manual` shall create `setupTermuxArchConfigs.sh` from this file in the working directory.  Run `setupTermuxArch.sh` and `setupTermuxArchConfigs.sh` loads automaticaly.  `setupTermuxArch.sh help` has more information.  Change CMIRROR (https://wiki.archlinux.org/index.php/Mirrors and https://archlinuxarm.org/about/mirrors) to desired geographic location in `setupTermuxArchConfigs.sh` to resolve 404 and checksum issues.  The following user configurable variables are available in this file:   
-# CMIRROR="http://mirror.archlinuxarm.org/"
-CMIRROR="http://os.archlinuxarm.org/"
 # dm=aria2c	# Works wants improvement 
 # dm=axel tba	# Not fully implemented
 # dm=lftp 	# Works wants improvement 
