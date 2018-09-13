@@ -32,7 +32,11 @@ _FTCHSTND_() {
 		_PRINTDOWNLOADINGFTCH_ 
 		aria2c -c -m 4 -Z "$NLCMIRROR$path$file".md5 "$NLCMIRROR$path$file"
 	elif [[ "$dm" = axel ]];then
-		axel http://"$CMIRROR" | tee /dev/fd/1 > "$TAMPDIR/global2localmirror"
+		axel -vv http://"$CMIRROR" 1 > "$TAMPDIR/global2localmirror"
+		NLCMIRROR="$(grep downloading "$TAMPDIR/global2localmirror" | awk {'print $5'})" 
+		echo "NLCMIRROR"
+		echo "$NLCMIRROR"
+		exit
 		_FMIRROR_
 		axel http://"$NLCMIRROR$path$file".md5 
 		axel http://"$NLCMIRROR$path$file"
