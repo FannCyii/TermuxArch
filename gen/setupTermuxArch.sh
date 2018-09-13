@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id509545970209"
+versionid="gen.v1.6.id703121096422"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -140,7 +140,7 @@ dependbp() {
 }
 
 _DEPENDDM_() {
-	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftp [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
 # 	# ADM[pkg]=cmd # Ordinary assignment adds another single element to the array.
 	for cmd in "${!ADM[@]}"; do # Enumerates download manager commands from all the available Termux https capable download manager packages.  
 		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
@@ -231,8 +231,7 @@ dwnl() {
 	if [[ "$dm" = aria2c ]] ; then
 		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = axel ]] ; then
-		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = lftp ]] ; then
 		lftpget https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = wget ]] ; then
