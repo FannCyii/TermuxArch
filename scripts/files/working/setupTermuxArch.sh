@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id909826154591"
+versionid="gen.v1.6.id102167604171"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -139,50 +139,35 @@ dependbp() {
 	fi
 }
 
-_DEPENDDM_() {
+_DEPENDDM_() { # Checks and sets dm if download manager is present. 
 	ADM=([aria2c]=aria2 [axel]=axel [curl]=curl [lftpget]=lftp [wget]=wget)
 	for cmd in "${!ADM[@]}" ; do
 		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
 	  		dm="$cmd"
-			echo "HTTPS capable download manager \`$dm\` found: Continuing…"
+			echo "Found https capable download manager \`$dm\`: Continuing…"
 			break
 		fi
 	done
-	if [[ -z "${PDM[@]:-}" ]] ; then
-		echo
-		echo "Found no HTTPS capable download managers present on device: Continuing…"
-	fi
 }
 
-depends() { # Checks for missing commands.  
-	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
-	if [[ "$dm" = "" ]] ; then
-# 	# Checks and sets dm if download manager is present. 
-# 	# IMPORTANT NOTE: CURRENTLY ONLY curl AND wget ARE THOROUGHLY TESTED.   All the download managers are NOT yet fully implemented.    
-		_DEPENDDM_
-	fi
-# 	# Checks if download manager is set. 
+_DEPENDIFDM_() { # Checks if download manager is set. 
 	aria2cifdm 
 	axelifdm 
  	lftpifdm 
 	curlifdm 
 	wgetifdm 
- 	if [[ "$dm" = "" ]] ; then
- 		if [[ -x "$(command -v curl)" ]] || [[ -x "$PREFIX"/bin/curl ]] ; then
- 			curlif 
- 		elif [[ -x "$(command -v wget)" ]] && [[ -x "$PREFIX"/bin/wget ]] ; then
- 			wgetif 
- 		elif  [[ -x "$(command -v aria2c)" ]] || [[ -x "$PREFIX"/bin/aria2c ]]; then
- 			aria2cif 
-  	 	elif [[ -x "$(command -v lftpget)" ]] || [[ -x "$PREFIX"/bin/lftpget ]] ; then
-  			lftpif 
- 	 	elif [[ -x "$(command -v axel)" ]] || [[ -x "$PREFIX"/bin/axel ]] ; then
- 			axelif 
- 		fi
- 	fi
+}
+
+depends() { # Checks for missing commands.  
+	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
+	if [[ "$dm" = "" ]] ; then
+		_DEPENDDM_
+	fi
+	_DEPENDIFDM_
 	# Sets and installs wget if nothing else was found, installed and set. 
 	if [[ "$dm" = "" ]] ; then
-		wgetif 
+		dm=wget
+		aptin+="wget "
 	fi
 	dependbp 
 	libandroidshmemif
