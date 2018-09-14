@@ -8,22 +8,21 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id7271"
+versionid="v1.6.id9717"
 ## INIT FUNCTIONS ##############################################################
 
 _ARG2DIR_() {  # Argument as ROOTDIR.
-	arg2="${@:2:1}"
-	if [[ -z "${arg2:-}" ]] ; then
+	ARG2="${@:2:1}"
+	if [[ -z "${ARG2:-}" ]] ; then
 		ROOTDIR=/arch
 		_PREPTERMUXARCH_
 	else
-		ROOTDIR=/"$arg2" 
+		ROOTDIR=/"$ARG2" 
 		_PREPTERMUXARCH_
 	fi
 }
 
 _BSDTARIF_() {
-	tm=bsdtar
 	if [[ ! -x "$(command -v bsdtar)" ]] || [[ ! -x "$PREFIX"/bin/bsdtar ]] ; then
 		aptin+="bsdtar "
 		apton+=("bsdtar")
@@ -54,12 +53,8 @@ _CHK_() {
 
 _CHKDWN_() {
 	if "$PREFIX"/bin/applets/sha512sum -c setupTermuxArch.sha512 1>/dev/null ; then
-		printf "\\e[0;34m 🕛 > 🕐 \\e[1;34mTermuxArch download: \\e[1;32mOK\\n\\n"
-		if [[ "$tm" = tar ]] ; then
-	 		proot --link2symlink -0 "$PREFIX"/bin/tar xf setupTermuxArch.tar.gz 
-		else
-	 		proot --link2symlink -0 "$PREFIX"/bin/applets/tar xf setupTermuxArch.tar.gz 
-		fi
+		printf "\\e[0;34m%s\\e[1;34m%s%s\\e[1;32m%s\\n\\n" " 🕛 > 🕐 " "TermuxArch download: " "OK"
+		proot --link2symlink -0 "$PREFIX"/bin/applets/tar xf setupTermuxArch.tar.gz 
 	else
 		_PRINTSHA512SYSCHKER_
 	fi
@@ -580,7 +575,6 @@ declare ROOTDIR=""
 declare wdir="$PWD/"
 declare STI=""		## Generates pseudo random number.
 declare STIME=""	## Generates pseudo random number.
-declare tm=""		## tar manager
 trap "_STRPERROR_ $LINENO $BASH_COMMAND $?" ERR 
 trap _STRPEXIT_ EXIT
 trap _STRPSIGNAL_ HUP INT TERM 

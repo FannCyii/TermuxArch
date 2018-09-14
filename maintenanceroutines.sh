@@ -17,26 +17,9 @@ _SYSINFO_() {
 }
 
 _SYSTEMINFO_ () {
-	printf "Begin TermuxArch system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "Begin TermuxArch $versionid system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\ndpkg --print-architecture result:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	dpkg --print-architecture >> "${wdir}setupTermuxArchSysInfo$STIME".log
- 	printf "\\ngetprop results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop gsm.sim.operator.iso-country]:" "[$(getprop gsm.sim.operator.iso-country)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop net.bt.name]:" "[$(getprop net.bt.name)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop persist.sys.locale]:" "[$(getprop persist.sys.locale)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.build.target_country]:" "[$(getprop ro.build.target_country)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.build.version.release]:" "[$(getprop ro.build.version.release)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.build.version.preview_sdk]:" "[$(getprop ro.build.version.preview_sdk)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.build.version.sdk]:" "[$(getprop ro.build.version.sdk)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.com.google.clientidbase]:" "[$(getprop ro.com.google.clientidbase)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.com.google.clientidbase.am]:" "[$(getprop ro.com.google.clientidbase.am)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.com.google.clientidbase.ms]:" "[$(getprop ro.com.google.clientidbase.ms)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.device]:" "[$(getprop ro.product.device)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.cpu.abi]:" "[$(getprop ro.product.cpu.abi)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.first_api_level]:" "[$(getprop ro.product.first_api_level)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.locale]:" "[$(getprop ro.product.locale)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.manufacturer]:" "[$(getprop ro.product.manufacturer)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
-	printf "%s %s\\n" "[getprop ro.product.model]:" "[$(getprop ro.product.model)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\nuname -a results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	uname -a >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
@@ -58,6 +41,27 @@ _SYSTEMINFO_ () {
 	if [[ -r /dev/shm ]]; then echo "/dev/shm is readable"; else echo "/dev/shm is not readable"; fi >> "${wdir}setupTermuxArchSysInfo$STIME".log 
 	if [[ -e /proc/stat ]]; then echo "/proc/stat exits"; else echo "/proc/stat does not exit"; fi >> "${wdir}setupTermuxArchSysInfo$STIME".log 
 	if [[ -r /proc/stat ]]; then echo "/proc/stat is readable"; else echo "/proc/stat is not readable"; fi >> "${wdir}setupTermuxArchSysInfo$STIME".log 
+ 	printf "\\ngetprop results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop gsm.sim.operator.iso-country]:" "[$(getprop gsm.sim.operator.iso-country)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop net.bt.name]:" "[$(getprop net.bt.name)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop net.dns1]:" "[$(getprop net.dns1)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop net.dns2]:" "[$(getprop net.dns2)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop net.dns3]:" "[$(getprop net.dns3)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop net.dns4]:" "[$(getprop net.dns4)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop persist.sys.locale]:" "[$(getprop persist.sys.locale)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.build.target_country]:" "[$(getprop ro.build.target_country)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.build.version.release]:" "[$(getprop ro.build.version.release)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.build.version.preview_sdk]:" "[$(getprop ro.build.version.preview_sdk)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.build.version.sdk]:" "[$(getprop ro.build.version.sdk)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.com.google.clientidbase]:" "[$(getprop ro.com.google.clientidbase)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.com.google.clientidbase.am]:" "[$(getprop ro.com.google.clientidbase.am)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.com.google.clientidbase.ms]:" "[$(getprop ro.com.google.clientidbase.ms)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.device]:" "[$(getprop ro.product.device)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.cpu.abi]:" "[$(getprop ro.product.cpu.abi)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.first_api_level]:" "[$(getprop ro.product.first_api_level)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.locale]:" "[$(getprop ro.product.locale)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.manufacturer]:" "[$(getprop ro.product.manufacturer)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "%s %s\\n" "[getprop ro.product.model]:" "[$(getprop ro.product.model)]" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\nDisk report $usrspace on /data $(date)\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log 
 	printf "\\ndf $INSTALLDIR results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	df "$INSTALLDIR" >> "${wdir}setupTermuxArchSysInfo$STIME".log 2>/dev/null ||:
@@ -67,7 +71,7 @@ _SYSTEMINFO_ () {
 	du -hs "$INSTALLDIR" >> "${wdir}setupTermuxArchSysInfo$STIME".log 2>/dev/null ||:
 	printf "\\nls -al $INSTALLDIR results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	ls -al "$INSTALLDIR" >> "${wdir}setupTermuxArchSysInfo$STIME".log 2>/dev/null ||:
-	printf "\\nEnd \`setupTermuxArchSysInfo$STIME.log\` system information.\\n\\e[0m" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "\\nEnd \`setupTermuxArchSysInfo$STIME.log\` $versionid system information.\\n\\e[0m" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\nShare this information along with your issue at https://github.com/sdrausty/TermuxArch/issues; include input and output.  This file is found in \`""${wdir}setupTermuxArchSysInfo$STIME.log\`.  If you think screenshots will help in a quicker resolution, include them in the post as well.  \\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 }
 
