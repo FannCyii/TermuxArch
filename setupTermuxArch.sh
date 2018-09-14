@@ -3,93 +3,56 @@
 # Hosted sdrausty.github.io/TermuxArch courtesy https://pages.github.com
 # https://sdrausty.github.io/TermuxArch/README has info about this project. 
 # https://sdrausty.github.io/TermuxArch/CONTRIBUTORS Thank you for your help.  
-# STANDARD_="function name" && STANDARD="variable name" are under construction.
 ################################################################################
 IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id0647"
+versionid="v1.6.id7271"
 ## INIT FUNCTIONS ##############################################################
-aria2cif() { 
-	dm=aria2c
-	if [[ -x "$(command -v aria2c)" ]] && [[ -x "$PREFIX"/bin/aria2c ]] ; then
-		:
-	else
-		aptin+="aria2 "
-		maptin+=("aria2")
-		apton+=("aria2c")
-	fi
-}
 
-aria2cifdm() {
-	if [[ "$dm" = aria2c ]] ; then
-		aria2cif 
-	fi
-}
-
-_ARG2DIR_() {  # Argument as rootdir.
+_ARG2DIR_() {  # Argument as ROOTDIR.
 	arg2="${@:2:1}"
 	if [[ -z "${arg2:-}" ]] ; then
-		rootdir=/arch
+		ROOTDIR=/arch
 		_PREPTERMUXARCH_
 	else
-		rootdir=/"$arg2" 
+		ROOTDIR=/"$arg2" 
 		_PREPTERMUXARCH_
 	fi
 }
 
-axelif() { 
-	dm=axel
-	if [[ -x "$(command -v axel)" ]] && [[ -x "$PREFIX"/bin/axel ]] ; then
-		:
-	else
-		aptin+="axel "
-		maptin+=("axel")
-		apton+=("axel")
-	fi
-}
-
-axelifdm() {
-	if [[ "$dm" = axel ]] ; then
-		axelif 
-	fi
-}
-
-bsdtarif() {
+_BSDTARIF_() {
 	tm=bsdtar
-	if [[ -x "$(command -v bsdtar)" ]] && [[ -x "$PREFIX"/bin/bsdtar ]] ; then
-		:
-	else
+	if [[ ! -x "$(command -v bsdtar)" ]] || [[ ! -x "$PREFIX"/bin/bsdtar ]] ; then
 		aptin+="bsdtar "
-		maptin+=("bsdtar")
 		apton+=("bsdtar")
 	fi
 }
 
-chk() {
+_CHK_() {
 	if "$PREFIX"/bin/applets/sha512sum -c termuxarchchecksum.sha512 1>/dev/null ; then
- 		chkself "$@"
+ 		_CHKSELF_ "$@"
 		printf "\\e[0;34m%s \\e[1;34m%s \\e[1;32m%s\\e[0m\\n" " 🕛 > 🕜" "TermuxArch $versionid integrity:" "OK"
-		loadconf
+		_LOADCONF_
 		. archlinuxconfig.sh
 		. espritfunctions.sh
 		. getimagefunctions.sh
 		. maintenanceroutines.sh
 		. necessaryfunctions.sh
 		. printoutstatements.sh
-		if [[ "$opt" = bloom ]] ; then
+		if [[ "$OPT" = bloom ]] ; then
 			rm -f termuxarchchecksum.sha512 
 		fi
-		if [[ "$opt" = manual ]] ; then
-			manual
+		if [[ "$OPT" = manual ]] ; then
+			_MANUAL_
 		fi
 	else
 		_PRINTSHA512SYSCHKER_
 	fi
 }
 
-chkdwn() {
+_CHKDWN_() {
 	if "$PREFIX"/bin/applets/sha512sum -c setupTermuxArch.sha512 1>/dev/null ; then
 		printf "\\e[0;34m 🕛 > 🕐 \\e[1;34mTermuxArch download: \\e[1;32mOK\\n\\n"
 		if [[ "$tm" = tar ]] ; then
@@ -102,40 +65,22 @@ chkdwn() {
 	fi
 }
 
-chkself() {
+_CHKSELF_() {
 	if [[ -f "setupTermuxArch.tmp" ]] ; then
 		if [[ "$(<setupTermuxArch.sh)" != "$(<setupTermuxArch.tmp)" ]] ; then
 			cp setupTermuxArch.sh "${wdir}setupTermuxArch.sh"
 			printf "\\e[0;32m%s\\e[1;34m: \\e[1;32mUPDATED\\n\\e[1;32mRESTARTED\\e[1;34m: \\e[0;32m%s %s \\n\\n\\e[0m"  "${0##*/}" "${0##*/}" "$args"
-# 			exit 231
  			.  "${wdir}setupTermuxArch.sh" "$@"
 		fi
 	fi
 }
 
-curlif() {
-	dm=curl
-	if [[ -x "$(command -v curl)" ]] && [[ -x "$PREFIX"/bin/curl ]] ; then
-		:
-	else
-		aptin+="curl "
-		maptin+=("curl")
-		apton+=("curl")
-	fi
-}
-
-curlifdm() {
-	if [[ "$dm" = curl ]] ; then
-		curlif 
-	fi
-}
-
-dependbp() {
+_DEPENDBP_() {
 	if [[ "$CPUABI" = "$CPUABIX86" ]] || [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
-		bsdtarif 
-		prootif 
+		_BSDTARIF_
+		_PROOTIF_
 	else
-		prootif 
+		_PROOTIF_
 	fi
 }
 
@@ -150,40 +95,38 @@ _DEPENDDM_() { # Checks and sets dm if download manager is present.
 	done
 }
 
-_DEPENDIFDM_() { # Checks if download manager is set. 
-# 	for pkg in "${!ADM[@]}" ; do
-# 		if [[ ! -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
-# 			echo found
-# 			aptin+="$pkg "
-# 			echo aptin is $aptin
-# 		fi
-# 		echo $pkg 
-# 	done
-	aria2cifdm 
-	axelifdm 
- 	lftpifdm 
-	curlifdm 
-	wgetifdm 
+_DEPENDIFDM_() { # Checks if download manager is set and sets install and pe. 
+ 	for pkg in "${!ADM[@]}" ; do
+ 		if [[ "$dm" = "$pkg" ]] && [[ ! -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+ 			aptin+="$pkg "
+			apton+=("${ADM[$pkg]}")
+ 			echo 
+			echo "Setting https capable download manager \`$pkg\` for install; Continuing…"
+ 		fi
+ 	done
 }
 
 depends() { # Checks for missing commands.  
 	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
 	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget)
+	if [[ "$dm" != "" ]] ; then
+		_DEPENDIFDM_
+	fi
 	if [[ "$dm" = "" ]] ; then
 		_DEPENDDM_
 	fi
-	_DEPENDIFDM_
 	# Sets and installs wget if nothing else was found, installed and set. 
 	if [[ "$dm" = "" ]] ; then
 		dm=wget
 		aptin+="wget "
+		apton+=(wget)
 	fi
-	dependbp 
-	libandroidshmemif
+	_DEPENDBP_ 
+	_LIBANDROIDSHMEMIF_
 #	# Installs missing commands.  
-	tapin "$aptin"
+	_TAPIN_ "$aptin"
 #	# Checks whether install missing commands was successful.  
-# 	pechk "$apton"
+# 	_PECHK_ "$apton"
 	echo
 	echo "Using ${dm:-wget} to manage downloads." 
 	printf "\\n\\e[0;34m 🕛 > 🕧 \\e[1;34mPrerequisites: \\e[1;32mOK  \\e[1;34mDownloading TermuxArch…\\n\\n\\e[0;32m"
@@ -199,8 +142,8 @@ dependsblock() {
 		. maintenanceroutines.sh
 		. necessaryfunctions.sh
 		. printoutstatements.sh
-		if [[ "$opt" = manual ]] ; then
-			manual
+		if [[ "$OPT" = manual ]] ; then
+			_MANUAL_
 		fi 
 	else
 		cd "$TAMPDIR" 
@@ -208,8 +151,8 @@ dependsblock() {
 		if [[ -f "${wdir}setupTermuxArch.sh" ]] ; then
 			cp "${wdir}setupTermuxArch.sh" setupTermuxArch.tmp
 		fi
-		chkdwn
-		chk "$@"
+		_CHKDWN_
+		_CHK_ "$@"
 	fi
 }
 
@@ -242,7 +185,7 @@ intro() {
 }
 
 introbloom() { # Bloom = `setupTermuxArch.sh manual verbose` 
-	opt=bloom 
+	OPT=bloom 
 	printf '\033]2;  bash setupTermuxArch.sh bloom 📲 \007'
 	printf "\\n\\e[0;34m 🕛 > 🕛 \\e[1;34mTermuxArch $versionid bloom option.  Run \\e[1;32mbash setupTermuxArch.sh help \\e[1;34mfor additional information.  Ensure background data is not restricted.  Check the wireless connection if you do not see one o'clock 🕐 below.  "
 	dependsblock "$@" 
@@ -279,32 +222,14 @@ introstndidstmt() { # depends $introstndid
 	printf "the TermuxArch files in \\e[0;32m%s\\e[1;34m.  " "$INSTALLDIR"
 }
 
-lftpif() {
-	dm=lftp
-	if [[ -x "$(command -v lftp)" ]] && [[ -x "$PREFIX"/bin/lftp ]] ; then
-		:
-	else
-		aptin+="lftp "
-		maptin+=("lftp")
-		apton+=("lftp")
-	fi
-}
-
-lftpifdm() {
-	if [[ "$dm" = lftp ]] ; then
-		lftpif 
-	fi
-}
-
-libandroidshmemif() {
+_LIBANDROIDSHMEMIF_() {
 	if [[ ! -f /data/data/com.termux/files/usr/lib/libandroid-shmem.so ]] ; then
 		aptin+="libandroid-shmem "
-		maptin+=(libandroid-shmem)
 		apton+=(libandroid-shmem)
 	fi
 }
 
-loadconf() {
+_LOADCONF_() {
 	if [[ -f "${wdir}setupTermuxArchConfigs.sh" ]] ; then
 		. "${wdir}setupTermuxArchConfigs.sh"
 		_PRINTCONFLOADED_ 
@@ -313,7 +238,7 @@ loadconf() {
 	fi
 }
 
-manual() {
+_MANUAL_() {
 	printf '\033]2; `bash setupTermuxArch.sh manual` 📲 \007'
 	_EDITORS_
 	if [[ -f "${wdir}setupTermuxArchConfigs.sh" ]] ; then
@@ -330,14 +255,14 @@ manual() {
 }
 
 _NAMEINSTALLDIR_() {
-	if [[ "$rootdir" = "" ]] ; then
-		rootdir=arch
+	if [[ "$ROOTDIR" = "" ]] ; then
+		ROOTDIR=arch
 	fi
-	INSTALLDIR="$(echo "$HOME/${rootdir%/}" |sed 's#//*#/#g')"
+	INSTALLDIR="$(echo "$HOME/${ROOTDIR%/}" |sed 's#//*#/#g')"
 }
 
 _NAMESTARTARCH_() { # ${@%/} removes trailing slash
- 	darch="$(echo "${rootdir%/}" |sed 's#//*#/#g')"
+ 	darch="$(echo "${ROOTDIR%/}" |sed 's#//*#/#g')"
 	if [[ "$darch" = "/arch" ]] ; then
 		aarch=""
 		startbi2=arch
@@ -365,7 +290,7 @@ _OPT2_() {
 		_ARG2DIR_ "$@" 
 	elif [[ "$2" = [Mm]* ]] ; then
 		echo Setting mode to manual.
-		opt=manual
+		OPT=manual
  		_OPT3_ "$@"  
 	elif [[ "$2" = [Rr][Ee]* ]] ; then
 		echo 
@@ -419,10 +344,15 @@ pe() {
 	exit
 }
 
-pechk() {
+_PECHK_() {
 	if [[ "$apton" != "" ]] ; then
 		pe @apton
 	fi
+	for pkg in "${!ADM[@]}" ; do
+		if [[ -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+			:
+		fi
+	done
 }
 
 _PREPTMPDIR_() { 
@@ -468,17 +398,14 @@ _PRINTUSAGE_() {
 	printf "\\n\\e[1;33m %s  \\e[0;32m%s \\e[1;34m%s \\e[0;32m%s \\e[1;34m%s \\e[0;32m%s\\e[1;34m%s \\n\\n" "SYSINFO" "${0##*/} sysinfo" "shall create" "setupTermuxArchSysInfo$STIME.log" "and populate it with system information.  Post this file along with detailed information at" "https://github.com/sdrausty/TermuxArch/issues" ".  If screenshots will help in resolving an issue better, include these along with information from the system information log file in a post as well." 
 	if [[ "$lcc" = 1 ]] ; then
 	printf "\\n\\e[1;32m" 
-	awk 'NR>=719 && NR<=872'  "${0##*/}" | awk '$1 == "##"' | awk '{ $1 = ""; print }' | awk '1;{print ""}'
+	awk 'NR>=610 && NR<=770'  "${0##*/}" | awk '$1 == "##"' | awk '{ $1 = ""; print }' | awk '1;{print ""}'
 	fi
 	_PRINTSTARTBIN_USAGE_
 }
 
-prootif() {
-	if [[ -x "$(command -v proot)" ]] &&  [[ -x "$PREFIX"/bin/proot ]] ; then
-		:
-	else
+_PROOTIF_() {
+	if [[ ! -x "$(command -v proot)" ]] ||  [[ ! -x "$PREFIX"/bin/proot ]] ; then
 		aptin+="proot "
-		maptin+=("proot")
 		apton+=("proot")
 	fi
 }
@@ -531,7 +458,7 @@ _RMARCHQ_() {
 	fi
 }
 
-tapin() {
+_TAPIN_() {
 	if [[ "$aptin" != "" ]] ; then
 		printf "\\n\\e[1;34mInstalling \\e[0;32m%s\\b\\e[1;34m…\\n\\n\\e[1;32m" "$aptin"
 		pkg install "$aptin" -o APT::Keep-Downloaded-Packages="true" --yes 
@@ -549,13 +476,13 @@ _SETROOT_EXCEPTION_() {
 
 _SETROOT_() {
 	if [[ "$CPUABI" = "$CPUABIX86" ]] ; then
-	#	rootdir=/root.i686
-		rootdir=/arch
+	#	ROOTDIR=/root.i686
+		ROOTDIR=/arch
 	elif [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
-	#	rootdir=/root.x86_64
-		rootdir=/arch
+	#	ROOTDIR=/root.x86_64
+		ROOTDIR=/arch
 	else
-		rootdir=/arch
+		ROOTDIR=/arch
 	fi
 }
 
@@ -570,7 +497,6 @@ _STANDARDIF_() {
 		:
 	else
 		aptin+="proot "
-		maptin+=("proot")
 		apton+=("proot")
 	fi
 }
@@ -618,6 +544,7 @@ _STRPEXIT_() { # Run on exit.
 
 _STRPSIGNAL_() { # Run on signal.
 	printf "\\e[?25h\\e[1;7;38;5;0mTermuxArch WARNING:  Signal $? received!\\e[0m\\n"
+ 	rm -rf "$TAMPDIR"
  	exit 211 
 }
 
@@ -626,31 +553,14 @@ _STRPQUIT_() { # Run on quit.
  	exit 221 
 }
 
-wgetif() {
-	dm=wget 
-	if [[ ! -x "$PREFIX"/bin/wget ]] ; then
-		aptin+="wget "
-		maptin+=("wget")
-		apton+=("wget")
-	fi
-}
-
-wgetifdm() {
-	if [[ "$dm" = wget ]] ; then
-		wgetif 
-	fi
-}
-
-## END:INIT FUNCTIONS 
+## END INIT FUNCTIONS 
 ## User Information: 
 ## Configurable variables such as mirrors and download manager options are in `setupTermuxArchConfigs.sh`.  Working with `kownconfigurations.sh` in the working directory is simple.  `bash setupTermuxArch.sh manual` shall create `setupTermuxArchConfigs.sh` in the working directory for editing; See `setupTermuxArch.sh help` for more information.  
 declare -A ADM # Declare associative array for all available download managers. 
-declare -a ATM
-declare -A PDM # Declare associative array for download managers. 
 declare -a args="$@"
 declare aptin=""	## apt string
 declare apton=""	## exception string
-declare commandif=""
+declare COMMANDIF=""
 declare CPUABI=""
 declare CPUABI5="armeabi"
 declare CPUABI7="armeabi-v7a"
@@ -665,8 +575,8 @@ declare FSTND=""
 declare INSTALLDIR=""
 declare lcc=""
 declare lcp=""
-declare opt=""
-declare rootdir=""
+declare OPT=""
+declare ROOTDIR=""
 declare wdir="$PWD/"
 declare STI=""		## Generates pseudo random number.
 declare STIME=""	## Generates pseudo random number.
@@ -679,8 +589,8 @@ if [[ -z "${TAMPDIR:-}" ]] ; then
 	TAMPDIR=""
 fi
 _SETROOT_
-commandif="$(command -v getprop)" ||:
-if [[ "$commandif" = "" ]] ; then
+COMMANDIF="$(command -v getprop)" ||:
+if [[ "$COMMANDIF" = "" ]] ; then
 	printf "\\n\\e[1;48;5;138m %s\\e[0m\\n\\n" "TermuxArch WARNING: Run \`bash ${0##*/}\` or \`./${0##*/}\` from the BASH shell in the OS system in Termux, i.e. Amazon Fire, Android and Chromebook."
 	exit
 fi
@@ -696,10 +606,11 @@ fi
 ONES="$(date +%s)" 
 ONESA="${ONES: -1}" 
 STIME="$ONESA$STIME"
-##  Information from `getprop` about device:
+##  Gets device information via `getprop`.
 CPUABI="$(getprop ro.product.cpu.abi)" 
-## OPTIONS STATUS: >> UNDERGOING TESTING <<  Image file and compound options are still under development.  USE WITH CAUTION!  IMPORTANT NOTE: CURRENTLY ONLY curl AND wget ARE THOROUGHLY TESTED.   All the download managers are NOT yet fully implemented.   
-## GRAMMAR: `setupTermuxArch.sh [HOW] [WHAT] [WHERE]`; all options are optional for network install.  AVAILABLE OPTIONS: `setupTermuxArch.sh [HOW] [WHAT] [WHERE]` and `setupTermuxArch.sh [~/|./|/absolute/path/]systemimage.tar.gz [WHERE]`.  
+## OPTIONS STATUS >> IMAGE FILE AND COMPOUND OPTIONS ARE STILL UNDER DEVELOPMENT <<  USE WITH CAUTION! 
+## AVAILABLE OPTIONS: `setupTermuxArch.sh [HOW] [WHAT] [WHERE]` and `setupTermuxArch.sh [~/|./|/absolute/path/]systemimage.tar.gz [WHERE]`.  
+## GRAMMAR: `setupTermuxArch.sh [HOW] [WHAT] [WHERE]`; all options are optional for network install.  
 ## SYNTAX: [HOW (aria2c|axel|curl|lftp|wget (default 1: available on system (default 2: wget)))]  [WHAT (install|manual|purge|refresh|sysinfo (default: install))] [WHERE (default: arch)]  Defaults are implied and can be omitted.  
 ## USAGE EXAMPLES: `setupTermuxArch.sh wget sysinfo` will use wget as the download manager and produce a system information file in the working directory.  This can be abbreviated to `setupTermuxArch.sh ws` and `setupTermuxArch.sh w s`. Similarly, `setupTermuxArch.sh wget manual customdir` will attempt to install the installation in customdir with wget and use manual mode during instalation.  Also, `setupTermuxArch.sh wget refresh customdir` shall refresh this installation using wget as the download manager. 
 ## <<<<<<<<<<<<>>>>>>>>>>>>
@@ -745,7 +656,7 @@ elif [[ "${1//-}" = [Aa][Xx]* ]] || [[ "${1//-}" = [Aa][Xx][Ii]* ]] ; then
 elif [[ "${1//-}" = [Aa][Dd]* ]] || [[ "${1//-}" = [Aa][Ss]* ]] ; then
 	echo
 	echo Getting device system information with \`aria2c\`.
-	dm=aria2c
+	dm=aria2
 	shift
 	_ARG2DIR_ "$@" 
 	_INTROSYSINFO_ "$@" 
@@ -753,7 +664,7 @@ elif [[ "${1//-}" = [Aa][Dd]* ]] || [[ "${1//-}" = [Aa][Ss]* ]] ; then
 elif [[ "${1//-}" = [Aa]* ]] ; then
 	echo
 	echo Setting \`aria2c\` as download manager.
-	dm=aria2c
+	dm=aria2
 	_OPT2_ "$@" 
 	intro "$@" 
 ## [b[loom]]  Create and run a local copy of TermuxArch in TermuxArchBloom.  Useful for running a customized setupTermuxArch.sh locally, for developing and hacking TermuxArch.  
@@ -817,7 +728,7 @@ elif [[ "${1//-}" = [Ll]* ]] ; then
 elif [[ "${1//-}" = [Mm]* ]] ; then
 	echo
 	echo Setting mode to manual.
-	opt=manual
+	OPT=manual
 	_OPT2_ "$@" 
 	intro "$@"  
 ## [o[ption]]  Option currently under development.

@@ -117,7 +117,7 @@ edqa() {
 edqaquestion() {
 	while true; do
 		printf "\\n"
-		if [[ "$opt" = bloom ]] || [[ "$opt" = manual ]];then
+		if [[ "$OPT" = bloom ]] || [[ "$OPT" = manual ]];then
 			printf "The following editor(s) $cedst\\b\\b are present.  Would you like to use \`\\e[1;32m${ceds[$i]}\\e[0;32m\` to edit \`\\e[1;32msetupTermuxArchConfigs.sh\\e[0;32m\`?  "
 			read -n 1 -p "Answer yes or no [Y|n]. "  yn
 		else 
@@ -139,7 +139,7 @@ edqaquestion() {
 
 edq2() {
 	while true; do
-		if [[ "$opt" = bloom ]] || [[ "$opt" = manual ]];then
+		if [[ "$OPT" = bloom ]] || [[ "$OPT" = manual ]];then
 			printf "\\n\\e[1;34m  Would you like to use \\e[1;32mnano\\e[1;34m or \\e[1;32mvi\\e[1;34m to edit \\e[1;32msetupTermuxArchConfigs.sh\\e[1;34m?  "
 			read -n 1 -p "Answer nano or vi [n|V]? "  nv
 		else 
