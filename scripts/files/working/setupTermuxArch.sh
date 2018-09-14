@@ -8,7 +8,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id9717"
+versionid="gen.v1.6.id804178540706"
 ## INIT FUNCTIONS ##############################################################
 
 _ARG2DIR_() {  # Argument as ROOTDIR.
@@ -152,17 +152,19 @@ dependsblock() {
 }
 
 dwnl() {
+	FILE[sha]="https://raw.githubusercontent.com/sdrausty/TermuxArch/master$DFL/setupTermuxArch.sha512"
+	FILE[tar]="https://raw.githubusercontent.com/sdrausty/TermuxArch/master$DFL/setupTermuxArch.tar.gz" 
 	if [[ "$dm" = aria2 ]] ; then
-		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		aria2c -Z "${FILE[sha]}" "${FILE[tar]}"
 	elif [[ "$dm" = axel ]] ; then
-		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
-		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		axel "${FILE[sha]}" 
+		axel "${FILE[tar]}"
 	elif [[ "$dm" = lftp ]] ; then
-		lftpget -c https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		lftpget -c "${FILE[sha]}" "${FILE[tar]}"
 	elif [[ "$dm" = wget ]] ; then
-		wget "$DMVERBOSE" -N --show-progress https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
+		wget "$DMVERBOSE" -N --show-progress "${FILE[sha]}" "${FILE[tar]}"
 	else
-		curl "$DMVERBOSE" -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 -OL https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz
+		curl "$DMVERBOSE" -OL "${FILE[sha]}" -OL "${FILE[tar]}"
 	fi
 	printf "\\n\\e[1;32m"
 }
@@ -393,7 +395,7 @@ _PRINTUSAGE_() {
 	printf "\\n\\e[1;33m %s  \\e[0;32m%s \\e[1;34m%s \\e[0;32m%s \\e[1;34m%s \\e[0;32m%s\\e[1;34m%s \\n\\n" "SYSINFO" "${0##*/} sysinfo" "shall create" "setupTermuxArchSysInfo$STIME.log" "and populate it with system information.  Post this file along with detailed information at" "https://github.com/sdrausty/TermuxArch/issues" ".  If screenshots will help in resolving an issue better, include these along with information from the system information log file in a post as well." 
 	if [[ "$lcc" = 1 ]] ; then
 	printf "\\n\\e[1;32m" 
-	awk 'NR>=610 && NR<=770'  "${0##*/}" | awk '$1 == "##"' | awk '{ $1 = ""; print }' | awk '1;{print ""}'
+	awk 'NR>=605 && NR<=765'  "${0##*/}" | awk '$1 == "##"' | awk '{ $1 = ""; print }' | awk '1;{print ""}'
 	fi
 	_PRINTSTARTBIN_USAGE_
 }
@@ -567,6 +569,7 @@ declare DMVERBOSE="-q"	## -v for verbose download manager output from curl and w
 declare	ed=""
 declare	dm=""
 declare FSTND=""
+declare -A FILE
 declare INSTALLDIR=""
 declare lcc=""
 declare lcp=""
