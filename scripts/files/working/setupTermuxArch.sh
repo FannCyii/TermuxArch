@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id533184485455"
+versionid="gen.v1.6.id208841744900"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -140,17 +140,25 @@ dependbp() {
 }
 
 _DEPENDDM_() { # Checks and sets dm if download manager is present. 
-	ADM=([aria2c]=aria2 [axel]=axel [curl]=curl [lftpget]=lftp [wget]=wget)
-	for cmd in "${!ADM[@]}" ; do
-		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
-	  		dm="$cmd"
-			echo "Found https capable download manager \`$dm\`: Continuing…"
+	for pkg in "${!ADM[@]}" ; do
+		if [[ -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+ 			dm="$pkg" 
+ 			echo 
+			echo "Found https capable download manager \`$pkg\`; Continuing…"
 			break
 		fi
 	done
 }
 
 _DEPENDIFDM_() { # Checks if download manager is set. 
+# 	for pkg in "${!ADM[@]}" ; do
+# 		if [[ ! -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+# 			echo found
+# 			aptin+="$pkg "
+# 			echo aptin is $aptin
+# 		fi
+# 		echo $pkg 
+# 	done
 	aria2cifdm 
 	axelifdm 
  	lftpifdm 
@@ -160,6 +168,7 @@ _DEPENDIFDM_() { # Checks if download manager is set.
 
 depends() { # Checks for missing commands.  
 	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
+	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget)
 	if [[ "$dm" = "" ]] ; then
 		_DEPENDDM_
 	fi
