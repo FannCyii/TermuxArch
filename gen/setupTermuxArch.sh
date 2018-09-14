@@ -8,33 +8,31 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="gen.v1.6.id347164254784"
+versionid="gen.v1.6.id662414122470"
 ## INIT FUNCTIONS ##############################################################
 
-_ARG2DIR_() {  # Argument as rootdir.
+_ARG2DIR_() {  # Argument as ROOTDIR.
 	arg2="${@:2:1}"
 	if [[ -z "${arg2:-}" ]] ; then
-		rootdir=/arch
+		ROOTDIR=/arch
 		_PREPTERMUXARCH_
 	else
-		rootdir=/"$arg2" 
+		ROOTDIR=/"$arg2" 
 		_PREPTERMUXARCH_
 	fi
 }
 
-bsdtarif() {
+_BSDTARIF_() {
 	tm=bsdtar
-	if [[ -x "$(command -v bsdtar)" ]] && [[ -x "$PREFIX"/bin/bsdtar ]] ; then
-		:
-	else
+	if [[ ! -x "$(command -v bsdtar)" ]] || [[ ! -x "$PREFIX"/bin/bsdtar ]] ; then
 		aptin+="bsdtar "
 		apton+=("bsdtar")
 	fi
 }
 
-chk() {
+_CHK_() {
 	if "$PREFIX"/bin/applets/sha512sum -c termuxarchchecksum.sha512 1>/dev/null ; then
- 		chkself "$@"
+ 		_CHKSELF_ "$@"
 		printf "\\e[0;34m%s \\e[1;34m%s \\e[1;32m%s\\e[0m\\n" " 🕛 > 🕜" "TermuxArch $versionid integrity:" "OK"
 		_LOADCONF_
 		. archlinuxconfig.sh
@@ -54,7 +52,7 @@ chk() {
 	fi
 }
 
-chkdwn() {
+_CHKDWN_() {
 	if "$PREFIX"/bin/applets/sha512sum -c setupTermuxArch.sha512 1>/dev/null ; then
 		printf "\\e[0;34m 🕛 > 🕐 \\e[1;34mTermuxArch download: \\e[1;32mOK\\n\\n"
 		if [[ "$tm" = tar ]] ; then
@@ -67,23 +65,22 @@ chkdwn() {
 	fi
 }
 
-chkself() {
+_CHKSELF_() {
 	if [[ -f "setupTermuxArch.tmp" ]] ; then
 		if [[ "$(<setupTermuxArch.sh)" != "$(<setupTermuxArch.tmp)" ]] ; then
 			cp setupTermuxArch.sh "${wdir}setupTermuxArch.sh"
 			printf "\\e[0;32m%s\\e[1;34m: \\e[1;32mUPDATED\\n\\e[1;32mRESTARTED\\e[1;34m: \\e[0;32m%s %s \\n\\n\\e[0m"  "${0##*/}" "${0##*/}" "$args"
-# 			exit 231
  			.  "${wdir}setupTermuxArch.sh" "$@"
 		fi
 	fi
 }
 
-dependbp() {
+_DEPENDBP_() {
 	if [[ "$CPUABI" = "$CPUABIX86" ]] || [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
-		bsdtarif 
-		prootif 
+		_BSDTARIF_
+		_PROOTIF_
 	else
-		prootif 
+		_PROOTIF_
 	fi
 }
 
@@ -124,12 +121,12 @@ depends() { # Checks for missing commands.
 		aptin+="wget "
 		apton+=(wget)
 	fi
-	dependbp 
-	libandroidshmemif
+	_DEPENDBP_ 
+	_LIBANDROIDSHMEMIF_
 #	# Installs missing commands.  
 	_TAPIN_ "$aptin"
 #	# Checks whether install missing commands was successful.  
-# 	pechk "$apton"
+# 	_PECHK_ "$apton"
 	echo
 	echo "Using ${dm:-wget} to manage downloads." 
 	printf "\\n\\e[0;34m 🕛 > 🕧 \\e[1;34mPrerequisites: \\e[1;32mOK  \\e[1;34mDownloading TermuxArch…\\n\\n\\e[0;32m"
@@ -154,8 +151,8 @@ dependsblock() {
 		if [[ -f "${wdir}setupTermuxArch.sh" ]] ; then
 			cp "${wdir}setupTermuxArch.sh" setupTermuxArch.tmp
 		fi
-		chkdwn
-		chk "$@"
+		_CHKDWN_
+		_CHK_ "$@"
 	fi
 }
 
@@ -225,7 +222,7 @@ introstndidstmt() { # depends $introstndid
 	printf "the TermuxArch files in \\e[0;32m%s\\e[1;34m.  " "$INSTALLDIR"
 }
 
-libandroidshmemif() {
+_LIBANDROIDSHMEMIF_() {
 	if [[ ! -f /data/data/com.termux/files/usr/lib/libandroid-shmem.so ]] ; then
 		aptin+="libandroid-shmem "
 		apton+=(libandroid-shmem)
@@ -258,14 +255,14 @@ _MANUAL_() {
 }
 
 _NAMEINSTALLDIR_() {
-	if [[ "$rootdir" = "" ]] ; then
-		rootdir=arch
+	if [[ "$ROOTDIR" = "" ]] ; then
+		ROOTDIR=arch
 	fi
-	INSTALLDIR="$(echo "$HOME/${rootdir%/}" |sed 's#//*#/#g')"
+	INSTALLDIR="$(echo "$HOME/${ROOTDIR%/}" |sed 's#//*#/#g')"
 }
 
 _NAMESTARTARCH_() { # ${@%/} removes trailing slash
- 	darch="$(echo "${rootdir%/}" |sed 's#//*#/#g')"
+ 	darch="$(echo "${ROOTDIR%/}" |sed 's#//*#/#g')"
 	if [[ "$darch" = "/arch" ]] ; then
 		aarch=""
 		startbi2=arch
@@ -347,10 +344,15 @@ pe() {
 	exit
 }
 
-pechk() {
+_PECHK_() {
 	if [[ "$apton" != "" ]] ; then
 		pe @apton
 	fi
+	for pkg in "${!ADM[@]}" ; do
+		if [[ -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+			:
+		fi
+	done
 }
 
 _PREPTMPDIR_() { 
@@ -401,10 +403,8 @@ _PRINTUSAGE_() {
 	_PRINTSTARTBIN_USAGE_
 }
 
-prootif() {
-	if [[ -x "$(command -v proot)" ]] &&  [[ -x "$PREFIX"/bin/proot ]] ; then
-		:
-	else
+_PROOTIF_() {
+	if [[ ! -x "$(command -v proot)" ]] ||  [[ ! -x "$PREFIX"/bin/proot ]] ; then
 		aptin+="proot "
 		apton+=("proot")
 	fi
@@ -476,13 +476,13 @@ _SETROOT_EXCEPTION_() {
 
 _SETROOT_() {
 	if [[ "$CPUABI" = "$CPUABIX86" ]] ; then
-	#	rootdir=/root.i686
-		rootdir=/arch
+	#	ROOTDIR=/root.i686
+		ROOTDIR=/arch
 	elif [[ "$CPUABI" = "$CPUABIX86_64" ]] ; then
-	#	rootdir=/root.x86_64
-		rootdir=/arch
+	#	ROOTDIR=/root.x86_64
+		ROOTDIR=/arch
 	else
-		rootdir=/arch
+		ROOTDIR=/arch
 	fi
 }
 
@@ -544,6 +544,7 @@ _STRPEXIT_() { # Run on exit.
 
 _STRPSIGNAL_() { # Run on signal.
 	printf "\\e[?25h\\e[1;7;38;5;0mTermuxArch WARNING:  Signal $? received!\\e[0m\\n"
+ 	rm -rf "$TAMPDIR"
  	exit 211 
 }
 
@@ -575,7 +576,7 @@ declare INSTALLDIR=""
 declare lcc=""
 declare lcp=""
 declare OPT=""
-declare rootdir=""
+declare ROOTDIR=""
 declare wdir="$PWD/"
 declare STI=""		## Generates pseudo random number.
 declare STIME=""	## Generates pseudo random number.
