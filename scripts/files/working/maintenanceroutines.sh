@@ -17,7 +17,7 @@ _SYSINFO_() {
 }
 
 _SYSTEMINFO_ () {
-	printf "Begin TermuxArch system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "Begin TermuxArch $versionid system information.\\n" > "${wdir}setupTermuxArchSysInfo$STIME".log
 	printf "\\ndpkg --print-architecture result:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	dpkg --print-architecture >> "${wdir}setupTermuxArchSysInfo$STIME".log
  	printf "\\ngetprop results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
