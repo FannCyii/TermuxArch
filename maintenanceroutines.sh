@@ -67,7 +67,8 @@ _SYSTEMINFO_ () {
 	du -hs "$INSTALLDIR" >> "${wdir}setupTermuxArchSysInfo$STIME".log 2>/dev/null ||:
 	printf "\\nls -al $INSTALLDIR results:\\n\\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 	ls -al "$INSTALLDIR" >> "${wdir}setupTermuxArchSysInfo$STIME".log 2>/dev/null ||:
-	printf "\\nEnd \`setupTermuxArchSysInfo$STIME.log\` system information.\\n\\n\\e[0mShare this information along with your issue at https://github.com/sdrausty/TermuxArch/issues; include input and output.  This file is found in \`""${wdir}setupTermuxArchSysInfo$STIME.log\`.  If you think screenshots will help in a quicker resolution, include them in the post as well.  \\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "\\nEnd \`setupTermuxArchSysInfo$STIME.log\` system information.\\n\\e[0m" >> "${wdir}setupTermuxArchSysInfo$STIME".log
+	printf "\\nShare this information along with your issue at https://github.com/sdrausty/TermuxArch/issues; include input and output.  This file is found in \`""${wdir}setupTermuxArchSysInfo$STIME.log\`.  If you think screenshots will help in a quicker resolution, include them in the post as well.  \\n" >> "${wdir}setupTermuxArchSysInfo$STIME".log
 }
 
 copyimage() { # A systemimage.tar.gz file can be used: `setupTermuxArch.sh ./[path/]systemimage.tar.gz` and `setupTermuxArch.sh /absolutepath/systemimage.tar.gz`

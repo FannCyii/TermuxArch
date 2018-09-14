@@ -8,7 +8,7 @@
 
 _FTCHIT_() {
  	_PRINT_DOWNLOADING_FTCHIT_ 
-	if [[ "$dm" = aria2c ]];then
+	if [[ "$dm" = aria2 ]];then
 		aria2c -c -Z http://"$CMIRROR$path$file".md5 http://"$CMIRROR$path$file"
 	elif [[ "$dm" = axel ]];then
 		axel http://"$CMIRROR$path$file".md5 
@@ -25,7 +25,7 @@ _FTCHIT_() {
 _FTCHSTND_() {
 	FSTND=1
 	_PRINTCONTACTING_ 
-	if [[ "$dm" = aria2c ]];then
+	if [[ "$dm" = aria2 ]];then
 		aria2c http://"$CMIRROR" 1>"$TAMPDIR/global2localmirror"
 		NLCMIRROR="$(grep Redirecting "$TAMPDIR/global2localmirror" | awk {'print $8'})" 
 		_PRINTDONE_ 
@@ -68,7 +68,7 @@ _FMIRROR_() {
 
 _GETIMAGE_() {
 	_PRINTDOWNLOADINGX86_ 
-	if [[ "$dm" = aria2c ]];then
+	if [[ "$dm" = aria2 ]];then
 		aria2c http://"$CMIRROR$path$file".md5 
 		_ISX86_
 		aria2c -c http://"$CMIRROR$path$file"

@@ -9,7 +9,7 @@ IFS=$'\n\t'
 set -Eeuo pipefail
 shopt -s nullglob globstar
 unset LD_PRELOAD
-versionid="v1.6.id3687"
+versionid="v1.6.id0647"
 ## INIT FUNCTIONS ##############################################################
 aria2cif() { 
 	dm=aria2c
@@ -139,60 +139,44 @@ dependbp() {
 	fi
 }
 
-_DEPENDDM_() {
-	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget) # Reference http://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
-# 	# ADM[pkg]=cmd # Ordinary assignment adds another single element to the array.
-	for cmd in "${!ADM[@]}"; do # Enumerates download manager commands from all the available Termux https capable download manager packages.  
-		if [[ -x "$PREFIX"/bin/$cmd ]] ; then
-# 			PDM=([${ADM[$cmd]}]=$cmd) # Create reverse associative array if cmd is present. 
-#		#	PDM[${ADM[$cmd]}]=$cmd # Builds associative array if cmds are present. 
-			PDM[$cmd]="${ADM[$cmd]}" # Create associative array if cmd is present. 
+_DEPENDDM_() { # Checks and sets dm if download manager is present. 
+	for pkg in "${!ADM[@]}" ; do
+		if [[ -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+ 			dm="$pkg" 
+ 			echo 
+			echo "Found https capable download manager \`$pkg\`; Continuing…"
 			break
 		fi
 	done
-	if [[ -z "${PDM[@]:-}" ]] ; then
-		echo
-		echo "Found no HTTPS capable download managers present on device: Continuing…"
-# 		PDM=([wget]=wget) # Create associative array if cmd is not present. 
-	else
-  		dm="${!PDM[@]}"	# Sets download manager.
-		echo
-		echo "HTTPS capable download manager \`$dm\` found: Continuing…"
-	fi
-#	# read -p "Press enter to continue" # https://unix.stackexchange.com/questions/293940/bash-how-can-i-make-press-any-key-to-continue
-# 	# read -n 1 -s -r -p "Press any key to continue" # https://unix.stackexchange.com/questions/293940/bash-how-can-i-make-press-any-key-to-continue
-# 	# exit
 }
 
-depends() { # Checks for missing commands.  
-	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
-	if [[ "$dm" = "" ]] ; then
-# 	# Checks and sets dm if download manager is present. 
-# 	# IMPORTANT NOTE: CURRENTLY ONLY curl AND wget ARE THOROUGHLY TESTED.   All the download managers are NOT yet fully implemented.    
-		_DEPENDDM_
-	fi
-# 	# Checks if download manager is set. 
+_DEPENDIFDM_() { # Checks if download manager is set. 
+# 	for pkg in "${!ADM[@]}" ; do
+# 		if [[ ! -x "$PREFIX"/bin/"${ADM[$pkg]}" ]] ; then
+# 			echo found
+# 			aptin+="$pkg "
+# 			echo aptin is $aptin
+# 		fi
+# 		echo $pkg 
+# 	done
 	aria2cifdm 
 	axelifdm 
  	lftpifdm 
 	curlifdm 
 	wgetifdm 
- 	if [[ "$dm" = "" ]] ; then
- 		if [[ -x "$(command -v curl)" ]] || [[ -x "$PREFIX"/bin/curl ]] ; then
- 			curlif 
- 		elif [[ -x "$(command -v wget)" ]] && [[ -x "$PREFIX"/bin/wget ]] ; then
- 			wgetif 
- 		elif  [[ -x "$(command -v aria2c)" ]] || [[ -x "$PREFIX"/bin/aria2c ]]; then
- 			aria2cif 
-  	 	elif [[ -x "$(command -v lftpget)" ]] || [[ -x "$PREFIX"/bin/lftpget ]] ; then
-  			lftpif 
- 	 	elif [[ -x "$(command -v axel)" ]] || [[ -x "$PREFIX"/bin/axel ]] ; then
- 			axelif 
- 		fi
- 	fi
+}
+
+depends() { # Checks for missing commands.  
+	printf "\\e[1;34mChecking prerequisites…\\n\\e[1;32m"
+	ADM=([aria2]=aria2c [axel]=axel [curl]=curl [lftp]=lftpget [wget]=wget)
+	if [[ "$dm" = "" ]] ; then
+		_DEPENDDM_
+	fi
+	_DEPENDIFDM_
 	# Sets and installs wget if nothing else was found, installed and set. 
 	if [[ "$dm" = "" ]] ; then
-		wgetif 
+		dm=wget
+		aptin+="wget "
 	fi
 	dependbp 
 	libandroidshmemif
@@ -230,7 +214,7 @@ dependsblock() {
 }
 
 dwnl() {
-	if [[ "$dm" = aria2c ]] ; then
+	if [[ "$dm" = aria2 ]] ; then
 		aria2c -Z https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.tar.gz 
 	elif [[ "$dm" = axel ]] ; then
 		axel https://raw.githubusercontent.com/sdrausty/TermuxArch/master"$DFL"/setupTermuxArch.sha512 
